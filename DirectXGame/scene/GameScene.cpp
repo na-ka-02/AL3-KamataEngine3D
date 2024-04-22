@@ -25,7 +25,7 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize();
+	player_->Initialize(model_,textureHandle_);
 
 	textureHandle_ = TextureManager::Load("sample.png");
 	//3Dモデルの生成

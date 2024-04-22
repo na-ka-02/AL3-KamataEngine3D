@@ -1,10 +1,19 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 #include <cassert>
 
 void Player::Initialize(Model* model, uint32_t textureHandle)
 {
-	//NuLLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	//NuLLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
-	worldTransform_;
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
+	model_=model;
+	textureHandle_=textureHandle;
+}
+
+void Player::Update()
+{
+}
+
+void Player::Draw()
+{
 }

@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "DebugCamera.h"
 #include "WorldTransform.h"
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -46,6 +47,9 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	//自キャラ
+	Player* player_ = nullptr;
+
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	//サウンドデータハンドル
@@ -53,12 +57,10 @@ private: // メンバ変数
 	//音声再生ハンドル
 	uint32_t voiceHandle_ = 0;
 
-	//スプライト
-	Sprite* sprite_ = nullptr;
 	//3Dモデル
 	Model* model_ = nullptr;
 	//デバックカメラ
-	DebugCamera*debugCamera_=nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -66,7 +68,7 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	//ImGuiで値を入力する変数
-	float inputFloat3[3]={0,0,0};
+	float inputFloat3[3] = { 0,0,0 };
 
 	/// <summary>
 	/// ゲームシーン用

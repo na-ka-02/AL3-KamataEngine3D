@@ -8,12 +8,12 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	//絵
-	delete sprite_;
 	//3Dモデル
 	delete model_;
 	//デバッグカメラ
 	delete debugCamera_;
+	//自キャラの削除
+	delete player_;
 }
 
 void GameScene::Initialize() {
@@ -22,20 +22,16 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//自キャラの生成
+	player_ = new Player();
+	//自キャラの初期化
+	player_->Initialize();
+
 	textureHandle_ = TextureManager::Load("sample.png");
-	//スプライトの生成
-	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
 	//3Dモデルの生成
 	model_ = Model::Create();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1680, 720);
-
-	//サウンドデータの読み込み
-	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
-	//音声再生
-	audio_->PlayWave(soundDataHandle_);
-	//音声再生
-	//voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -54,24 +50,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	//スプライトの今の座標を取得
-	Vector2 position = sprite_->GetPosition();
-	//座標を{2,1}移動
-	position.x += 1.0f;
-	position.y += 1.0f;
-	//移動した座標をスプライトに反映
-	sprite_->SetPosition(position);
-
-	//スペースキーを押した瞬間
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//音声停止
-		if (audio_->IsPlaying(voiceHandle_)) {
-			audio_->StopWave(voiceHandle_);
-		}
-		else {
-			voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
-		}
-	}
+	//自キャラの更新
+	player_->Update();
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -122,14 +102,15 @@ void GameScene::Draw() {
 
 	//3Dモデル描画
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+
+	//自キャラの描画
+	player_->Draw();
+
 	//デバッグカメラ←3Dモデル直下に書く
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
-
-	//ラインを描画する(始点座標、終点座標、色(RGBA)の順)
-	PrimitiveDrawer::GetInstance()->DrawLine3d({ 0,0,0 }, { 0,10,0 }, { 1.0f,0.0f,0.0f,1.0f });
 
 #pragma endregion
 
@@ -141,10 +122,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
-	//絵を描画
-	sprite_->Draw();
-
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

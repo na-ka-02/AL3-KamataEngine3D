@@ -87,8 +87,8 @@ void GameScene::Update() {
 	//デバックテキスト表示終了
 	ImGui::End();
 
-	//デモウィンドウの表示を有効化
-	ImGui::ShowDemoWindow();
+	////デモウィンドウの表示を有効化
+	//ImGui::ShowDemoWindow();
 
 }
 

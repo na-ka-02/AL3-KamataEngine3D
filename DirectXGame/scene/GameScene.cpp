@@ -22,14 +22,14 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//自キャラの生成
-	player_ = new Player();
-	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_);
-
+	//テクスチャーの読み込み
 	textureHandle_ = TextureManager::Load("sample.png");
 	//3Dモデルの生成
 	model_ = Model::Create();
+	//自キャラの生成
+	player_ = new Player();
+	//自キャラの初期化
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1680, 720);
 
@@ -100,14 +100,12 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	//3Dモデル描画
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	//自キャラの描画
 	player_->Draw();
 
 	//デバッグカメラ←3Dモデル直下に書く
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	//model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

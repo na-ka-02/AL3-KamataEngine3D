@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "DebugCamera.h"
 #include "WorldTransform.h"
+#include "vector"
 
 /// <summary>
 /// ゲームシーン
@@ -58,7 +59,7 @@ private: // メンバ変数
 	//3Dモデル
 	Model* model_ = nullptr;
 	//デバックカメラ
-	DebugCamera*debugCamera_=nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -66,9 +67,14 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	//ImGuiで値を入力する変数
-	float inputFloat3[3]={0,0,0};
+	float inputFloat3[3] = { 0,0,0 };
 
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+
+	//ブロック
+	Model* blockModel_;
+	//ブロック用のワールド変換
+	std::vector<WorldTransform*>worldTransformBlockModels_;
 };

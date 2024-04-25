@@ -14,6 +14,16 @@ GameScene::~GameScene() {
 	delete model_;
 	//デバッグカメラ
 	delete debugCamera_;
+	//ブロック
+	delete blockModel_;
+	//ブロック用のワールド変換
+	//for文で全部消す
+	for(WorldTransform*worldTransformBlockModel:worldTransformBlockModels_)
+	{
+	delete worldTransformBlockModel;
+	}
+	//ブロックの中身も全部消す。clearは全部消す。
+	worldTransformBlockModels_.clear();
 }
 
 void GameScene::Initialize() {
@@ -29,6 +39,8 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1680, 720);
+	//ブロックモデル
+	blockModel_=Model::Create();
 
 	//サウンドデータの読み込み
 	soundDataHandle_ = audio_->LoadWave("fanfare.wav");

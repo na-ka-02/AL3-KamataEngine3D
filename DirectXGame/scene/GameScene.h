@@ -80,6 +80,6 @@ private: // メンバ変数
 	//ブロックのテクスチャー(2-2)
 	uint32_t blockTextureHandle_ = 0u;
 	//ブロック用のワールド変換(可変長要素)
-	std::vector<WorldTransform*>worldTransformBlockModels_;
-
+	//std::vectorを重ねると二次元配列になる
+	std::vector<std::vector<WorldTransform*>>worldTransformBlockModels_;
 };

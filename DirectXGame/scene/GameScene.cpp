@@ -20,10 +20,16 @@ GameScene::~GameScene() {
 	delete block_;
 	//ブロック用のワールド変換
 	//拡張for文で消す→とりあえず全部の要素を消せる
-	for (WorldTransform* worldTransformBlockModel : worldTransformBlockModels_)
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
-		delete worldTransformBlockModel;
+		for (WorldTransform* worldTransformBlockModel : worldTransformBlockLine)
+		{
+			{
+				delete worldTransformBlockModel;
+			}
+		}
 	}
+
 	//ブロックの中身も全部消す。clearは全部消す。
 	worldTransformBlockModels_.clear();
 }
@@ -51,18 +57,34 @@ void GameScene::Initialize() {
 
 	//ブロック
 	//要素数
+	//縦
+	const uint32_t kNumBlockVirtical = 10;
+	//横
 	const uint32_t kNumBlockHorizontal = 20;
 	//ブロック1個分の横幅
+	//縦
+	const float kBlockHeight = 2.0f;
+	//横
 	const float kBlockWidth = 2.0f;
 	//要素数を変更する
-	worldTransformBlockModels_.resize(kNumBlockHorizontal);
-	//キューブの生成
-	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i)
+	//列数を設定(縦方向のブロック数)
+	worldTransformBlockModels_.resize(kNumBlockVirtical);
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
 	{
-		worldTransformBlockModels_[i] = new WorldTransform();
-		worldTransformBlockModels_[i]->Initialize();
-		worldTransformBlockModels_[i]->translation_.x = kBlockWidth * i;
-		worldTransformBlockModels_[i]->translation_.y = 0.0f;
+		//1列の要素数を設定(横方向のブロック数)
+		worldTransformBlockModels_[i].resize(kNumBlockHorizontal);
+	}
+
+	//キューブの生成
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
+	{
+		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j)
+		{
+			worldTransformBlockModels_[i][j] = new WorldTransform();
+			worldTransformBlockModels_[i][j]->Initialize();
+			worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
+			worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
+		}
 	}
 
 	//サウンドデータの読み込み
@@ -98,19 +120,27 @@ void GameScene::Update() {
 	sprite_->SetPosition(position);
 
 	//ブロックの更新
-	for (WorldTransform* worldTransformBlock : worldTransformBlockModels_)
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+		{
+			if(!worldTransformBlock)
+				continue;
+			worldTransformBlock->matWorld_ =
+				MakeAffineMatrix
+				(
+					worldTransformBlock->scale_,
+					worldTransformBlock->rotation_,
+					worldTransformBlock->translation_
+				);
 
-		worldTransformBlock->matWorld_=
-			MakeAffineMatrix
-			(
-			worldTransformBlock->scale_,
-			worldTransformBlock->rotation_, 
-			worldTransformBlock->translation_
-			);
-
-		worldTransformBlock->TransferMatrix();
+			worldTransformBlock->TransferMatrix();
+		}
 	}
+
+
+
+
 
 	//スペースキーを押した瞬間
 	if (input_->TriggerKey(DIK_SPACE))
@@ -176,10 +206,16 @@ void GameScene::Draw() {
 	//3Dモデル描画
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	//ブロック
-	for(WorldTransform*worldTransformBlock:worldTransformBlockModels_)
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
-	blockModel_->Draw(*worldTransformBlock,viewProjection_);
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+		{
+			if(!worldTransformBlock)
+				continue;
+			blockModel_->Draw(*worldTransformBlock, viewProjection_);
+		}
 	}
+
 	//デバッグカメラ←3Dモデル直下に書く
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 

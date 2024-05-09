@@ -73,8 +73,13 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 
-	//ブロック
+	//ブロック(2-1)
 	Model* blockModel_;
-	//ブロック用のワールド変換
+	//ブロック(2-2)
+	Model* block_ = nullptr;
+	//ブロックのテクスチャー(2-2)
+	uint32_t blockTextureHandle_ = 0u;
+	//ブロック用のワールド変換(可変長要素)
 	std::vector<WorldTransform*>worldTransformBlockModels_;
+
 };

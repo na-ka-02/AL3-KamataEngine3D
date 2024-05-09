@@ -3,6 +3,7 @@
 #include "ImGuiManager.h"
 #include"PrimitiveDrawer.h"
 #include"AxisIndicator.h"
+#include"mathMT.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -16,11 +17,12 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	//ブロック
 	delete blockModel_;
+	delete block_;
 	//ブロック用のワールド変換
-	//for文で全部消す
-	for(WorldTransform*worldTransformBlockModel:worldTransformBlockModels_)
+	//拡張for文で消す→とりあえず全部の要素を消せる
+	for (WorldTransform* worldTransformBlockModel : worldTransformBlockModels_)
 	{
-	delete worldTransformBlockModel;
+		delete worldTransformBlockModel;
 	}
 	//ブロックの中身も全部消す。clearは全部消す。
 	worldTransformBlockModels_.clear();
@@ -32,15 +34,36 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//ブロックモデルの読み込み(2-1)
 	textureHandle_ = TextureManager::Load("sample.png");
+	//ブロックモデルの読み込み(2-2)
+	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
 	//3Dモデルの生成
 	model_ = Model::Create();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1680, 720);
-	//ブロックモデル
-	blockModel_=Model::Create();
+	//ブロックモデル(2-1)
+	blockModel_ = Model::Create();
+	//ブロックモデル(2-2)
+	block_ = Model::Create();
+
+	//ブロック
+	//要素数
+	const uint32_t kNumBlockHorizontal = 20;
+	//ブロック1個分の横幅
+	const float kBlockWidth = 2.0f;
+	//要素数を変更する
+	worldTransformBlockModels_.resize(kNumBlockHorizontal);
+	//キューブの生成
+	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i)
+	{
+		worldTransformBlockModels_[i] = new WorldTransform();
+		worldTransformBlockModels_[i]->Initialize();
+		worldTransformBlockModels_[i]->translation_.x = kBlockWidth * i;
+		worldTransformBlockModels_[i]->translation_.y = 0.0f;
+	}
 
 	//サウンドデータの読み込み
 	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
@@ -74,13 +97,31 @@ void GameScene::Update() {
 	//移動した座標をスプライトに反映
 	sprite_->SetPosition(position);
 
+	//ブロックの更新
+	for (WorldTransform* worldTransformBlock : worldTransformBlockModels_)
+	{
+
+		worldTransformBlock->matWorld_=
+			MakeAffineMatrix
+			(
+			worldTransformBlock->scale_,
+			worldTransformBlock->rotation_, 
+			worldTransformBlock->translation_
+			);
+
+		worldTransformBlock->TransferMatrix();
+	}
+
 	//スペースキーを押した瞬間
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE))
+	{
 		//音声停止
-		if (audio_->IsPlaying(voiceHandle_)) {
+		if (audio_->IsPlaying(voiceHandle_))
+		{
 			audio_->StopWave(voiceHandle_);
 		}
-		else {
+		else
+		{
 			voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 		}
 	}
@@ -134,6 +175,11 @@ void GameScene::Draw() {
 
 	//3Dモデル描画
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	//ブロック
+	for(WorldTransform*worldTransformBlock:worldTransformBlockModels_)
+	{
+	blockModel_->Draw(*worldTransformBlock,viewProjection_);
+	}
 	//デバッグカメラ←3Dモデル直下に書く
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 

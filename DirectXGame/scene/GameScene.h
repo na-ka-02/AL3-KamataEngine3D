@@ -85,4 +85,8 @@ private: // メンバ変数
 	//ブロック用のワールド変換(可変長要素)
 	//std::vectorを重ねると二次元配列になる
 	std::vector<std::vector<WorldTransform*>>worldTransformBlockModels_;
+
+	//天球
+	Model* modelSkydome_ = nullptr;
+
 };

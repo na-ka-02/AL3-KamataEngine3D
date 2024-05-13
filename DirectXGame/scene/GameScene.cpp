@@ -46,8 +46,10 @@ void GameScene::Initialize() {
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
-	//3Dモデルの生成
+	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
+	//3Dモデルの生成(2-3の天球)
+	modelSkydome_=Model::CreateFromOBJ("skydome",true);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	//ブロックモデル(2-1)
@@ -82,17 +84,14 @@ void GameScene::Initialize() {
 		{
 			worldTransformBlockModels_[i][j] = new WorldTransform();
 			worldTransformBlockModels_[i][j]->Initialize();
-			//
-			for (uint32_t k = 0; k < 100; ++k)
+
+			if (j % 2 == 0)
 			{
-				if (k % 2 == 0)
-				{
-					worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
-				}
-				if (k % 2 == 1)
-				{
-					worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
-				}
+				worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
+			}
+			if (i % 2 == 0)
+			{
+				worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
 			}
 		}
 	}

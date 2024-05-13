@@ -58,6 +58,9 @@ private: // メンバ変数
 	Sprite* sprite_ = nullptr;
 	//3Dモデル
 	Model* model_ = nullptr;
+
+	//デバックカメラ有効
+	bool isDebugCameraActive_ = false;
 	//デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
 

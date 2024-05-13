@@ -49,7 +49,7 @@ void GameScene::Initialize() {
 	//3Dモデルの生成
 	model_ = Model::Create();
 	//デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1680, 720);
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
@@ -82,8 +82,18 @@ void GameScene::Initialize() {
 		{
 			worldTransformBlockModels_[i][j] = new WorldTransform();
 			worldTransformBlockModels_[i][j]->Initialize();
-			worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
+			//
+			for (uint32_t k = 0; k < 100; ++k)
+			{
+				if (k % 2 == 0)
+				{
+					worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
+				}
+				if (k % 2 == 1)
+				{
+					worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
+				}
+			}
 		}
 	}
 
@@ -114,18 +124,20 @@ void GameScene::Update() {
 	//スプライトの今の座標を取得
 	Vector2 position = sprite_->GetPosition();
 	//座標を{2,1}移動
-	position.x += 1.0f;
-	position.y += 1.0f;
+	/*position.x += 1.0f;
+	position.y += 1.0f;*/
 	//移動した座標をスプライトに反映
-	sprite_->SetPosition(position);
+	/*sprite_->SetPosition(position);*/
 
 	//ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
 		{
-			if(!worldTransformBlock)
+			if (!worldTransformBlock)
+			{
 				continue;
+			}
 			worldTransformBlock->matWorld_ =
 				MakeAffineMatrix
 				(
@@ -137,10 +149,6 @@ void GameScene::Update() {
 			worldTransformBlock->TransferMatrix();
 		}
 	}
-
-
-
-
 
 	//スペースキーを押した瞬間
 	if (input_->TriggerKey(DIK_SPACE))
@@ -158,6 +166,32 @@ void GameScene::Update() {
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
+
+	//デバッグカメラ有効無効切り替え(ifdefはDebugでしか機能しない)
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE))
+	{
+		isDebugCameraActive_ ^= true;
+	}
+#endif
+
+	//カメラの処理
+	if (isDebugCameraActive_)
+	{
+		//デバッグの更新
+		debugCamera_->Update();
+		//デバッグカメラのビュー行列
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		//デバッグカメラのプロジェクション行列
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		//ビュープロジェクション行列の更新と転送
+		viewProjection_.TransferMatrix();
+	}
+	else
+	{
+		//
+		viewProjection_.UpdateMatrix();
+	}
 
 	//デバックテキストの表示開始
 	ImGui::Begin("Debug1");
@@ -204,20 +238,22 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//3Dモデル描画
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	//ブロック
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
 		{
-			if(!worldTransformBlock)
+			if (!worldTransformBlock)
+			{
 				continue;
+			}
 			blockModel_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
 
 	//デバッグカメラ←3Dモデル直下に書く
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -237,7 +273,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//絵を描画
-	sprite_->Draw();
+	//sprite_->Draw();
 
 
 	// スプライト描画後処理

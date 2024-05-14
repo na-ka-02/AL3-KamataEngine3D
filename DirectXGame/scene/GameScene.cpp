@@ -49,7 +49,7 @@ void GameScene::Initialize() {
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
 	//3Dモデルの生成(2-3の天球)
-	modelSkydome_=Model::CreateFromOBJ("skydome",true);
+	//modelSkydome_=Model::CreateFromOBJ("skydome",true);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	//ブロックモデル(2-1)

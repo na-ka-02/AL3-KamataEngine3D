@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include "ViewProjection.h"
 
 ///
 ///天球
@@ -27,4 +28,5 @@ private:
 	WorldTransform worldTransform_;
 	//モデル
 	Model*model_=nullptr;
+
 };

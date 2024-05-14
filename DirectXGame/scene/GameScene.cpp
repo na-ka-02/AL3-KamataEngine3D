@@ -18,6 +18,7 @@ GameScene::~GameScene() {
 	//ブロック
 	delete blockModel_;
 	delete block_;
+
 	//ブロック用のワールド変換
 	//拡張for文で消す→とりあえず全部の要素を消せる
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
@@ -32,6 +33,9 @@ GameScene::~GameScene() {
 
 	//ブロックの中身も全部消す。clearは全部消す。
 	worldTransformBlockModels_.clear();
+
+	//天球
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -49,13 +53,14 @@ void GameScene::Initialize() {
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
 	//3Dモデルの生成(2-3の天球)
-	//modelSkydome_=Model::CreateFromOBJ("skydome",true);
+	modelSkydome_=Model::CreateFromOBJ("skydome",true);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
 	block_ = Model::Create();
+
 
 	//ブロック
 	//要素数

@@ -86,7 +86,10 @@ private: // メンバ変数
 	//std::vectorを重ねると二次元配列になる
 	std::vector<std::vector<WorldTransform*>>worldTransformBlockModels_;
 
-	//天球
+	//2-3
+	//天球のモデル
 	Model* modelSkydome_ = nullptr;
+	//天球のテクスチャーハンドル
+	uint32_t sphereTextureHandle_ = 0u;
 
 };

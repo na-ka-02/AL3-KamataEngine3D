@@ -53,13 +53,16 @@ void GameScene::Initialize() {
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
 	//3Dモデルの生成(2-3の天球)
-	modelSkydome_=Model::CreateFromOBJ("skydome",true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+	debugCamera_->SetFarZ(5000);
+
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
 	block_ = Model::Create();
+
 
 
 	//ブロック
@@ -256,8 +259,11 @@ void GameScene::Draw() {
 		}
 	}
 
+	modelSkydome_->Draw();
+
 	//デバッグカメラ←3Dモデル直下に書く
 	blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -10,9 +10,21 @@ class Skydome
 {
 public:
 	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+
+	Skydome();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+
+	~Skydome();
+
+	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(Model* model,ViewProjection* viewProjection);
 
 	/// <summary>
 	/// 更新
@@ -26,10 +38,8 @@ public:
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
-	//ビュープロジェクション
-	ViewProjection viewProjection_;
-
 	//モデル
-	Model*model_=nullptr;
-
+	Model* model_ = nullptr;
+	//ビュープロジェクション
+	ViewProjection* viewProjection_ = nullptr;
 };

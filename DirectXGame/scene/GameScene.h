@@ -9,6 +9,8 @@
 #include "DebugCamera.h"
 #include "WorldTransform.h"
 #include "vector"
+#include"Player.h"
+#include"Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -46,6 +48,11 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+
+	//自キャラ
+	Player* player_ = nullptr;
+	//天球
+	Skydome* skydome_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -89,7 +96,4 @@ private: // メンバ変数
 	//2-3
 	//天球のモデル
 	Model* modelSkydome_ = nullptr;
-	//天球のテクスチャーハンドル
-	uint32_t sphereTextureHandle_ = 0u;
-
 };

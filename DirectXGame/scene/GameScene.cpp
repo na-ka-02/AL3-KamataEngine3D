@@ -15,6 +15,10 @@ GameScene::~GameScene() {
 	delete model_;
 	//デバッグカメラ
 	delete debugCamera_;
+	//自キャラ
+	delete player_;
+	//天球
+	delete skydome_;
 	//ブロック
 	delete blockModel_;
 	delete block_;
@@ -44,23 +48,24 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//自キャラの生成
-	player_ = new Player();
-	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_);
-
 	//ブロックモデルの読み込み(2-1)
 	textureHandle_ = TextureManager::Load("sample.png");
 	//ブロックモデルの読み込み(2-2)
-	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
+	blockTextureHandle_ = TextureManager::Load("./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
-	//3Dモデルの生成(2-3の天球)
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//自キャラの生成
+	player_ = new Player();
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	//3Dモデルの生成(2-3の天球)
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//天球の生成
+	skydome_ = new Skydome();
+	//天球の初期化
+	skydome_->Initialize(model_, &viewProjection_);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
@@ -69,8 +74,6 @@ void GameScene::Initialize() {
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
 	block_ = Model::Create();
-
-
 
 	//ブロック
 	//要素数
@@ -143,6 +146,10 @@ void GameScene::Update() {
 	//移動した座標をスプライトに反映
 	/*sprite_->SetPosition(position);*/
 
+	//自キャラの更新
+	player_->Update();
+	//天球の更新
+	skydome_->Update();
 	//ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
@@ -252,7 +259,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//3Dモデル描画
-	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	//ブロック
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
@@ -266,7 +273,10 @@ void GameScene::Draw() {
 		}
 	}
 
-	modelSkydome_->Draw();
+	//自キャラの描画
+	player_->Draw();
+
+	skydome_->Draw();
 
 	//デバッグカメラ←3Dモデル直下に書く
 	blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);

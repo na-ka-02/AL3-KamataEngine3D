@@ -44,6 +44,11 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//自キャラの生成
+	player_ = new Player();
+	//自キャラの初期化
+	player_->Initialize(model_,textureHandle_);
+
 	//ブロックモデルの読み込み(2-1)
 	textureHandle_ = TextureManager::Load("sample.png");
 	//ブロックモデルの読み込み(2-2)
@@ -54,6 +59,8 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//自キャラの初期化
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
@@ -264,6 +271,7 @@ void GameScene::Draw() {
 	//デバッグカメラ←3Dモデル直下に書く
 	blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
 
+	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

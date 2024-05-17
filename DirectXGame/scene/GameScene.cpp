@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 	//ブロックモデルの読み込み(2-1)
 	textureHandle_ = TextureManager::Load("sample.png");
 	//ブロックモデルの読み込み(2-2)
-	blockTextureHandle_ = TextureManager::Load("./cube./cube.jpg");
+	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
 	//3Dモデルの生成(1-3)
@@ -65,7 +65,7 @@ void GameScene::Initialize() {
 	//天球の生成
 	skydome_ = new Skydome();
 	//天球の初期化
-	skydome_->Initialize(model_, &viewProjection_);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
@@ -172,7 +172,7 @@ void GameScene::Update() {
 	}
 
 	//スペースキーを押した瞬間
-	if (input_->TriggerKey(DIK_SPACE))
+	if (input_->TriggerKey(DIK_RETURN))
 	{
 		//音声停止
 		if (audio_->IsPlaying(voiceHandle_))
@@ -279,9 +279,9 @@ void GameScene::Draw() {
 	skydome_->Draw();
 
 	//デバッグカメラ←3Dモデル直下に書く
-	blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
+	//blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
 
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	//model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -49,11 +49,11 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//ブロックモデルの読み込み(2-1)
-	textureHandle_ = TextureManager::Load("sample.png");
+	textureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
-	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
+	sprite_ = Sprite::Create(textureHandle_, { 1000,100 });
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
 	//自キャラの生成

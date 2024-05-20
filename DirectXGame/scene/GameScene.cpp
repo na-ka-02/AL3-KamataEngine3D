@@ -53,23 +53,23 @@ void GameScene::Initialize() {
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 1000,100 });
-	
+
 	//3Dモデルの生成(1-3)
 	model_ = Model::Create();
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
-	
+
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//天球の生成
 	skydome_ = new Skydome();
 	//天球の初期化
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
-	
+
 	//マップチップの呼び出し(2-4)
-	mapChipField_=new MapChipField;
+	mapChipField_ = new MapChipField;
 	//マップチップファイルの読み込み
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	//マップチップの生成
@@ -83,7 +83,7 @@ void GameScene::Initialize() {
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
 	block_ = Model::Create();
-	
+
 #pragma region 2-1
 
 #pragma endregion
@@ -332,41 +332,48 @@ void GameScene::GenerateBlocks()
 	//ブロック
 	//要素数
 	//縦
-	const uint32_t kNumBlockVirtical = 10;
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	//横
-	const uint32_t kNumBlockHorizontal = 20;
+	uint32_t nNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 	//ブロック1個分の横幅
-	//縦
-	const float kBlockHeight = 2.0f;
-	//横
-	const float kBlockWidth = 2.0f;
+	////縦
+	//const float kBlockHeight = 2.0f;
+	////横
+	//const float kBlockWidth = 2.0f;
 	//要素数を変更する
 	//列数を設定(縦方向のブロック数)
-	worldTransformBlockModels_.resize(kNumBlockVirtical);
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
+	worldTransformBlockModels_.resize(numBlockVirtical);
+	for (uint32_t i = 0; i < numBlockVirtical; ++i)
 	{
 		//1列の要素数を設定(横方向のブロック数)
-		worldTransformBlockModels_[i].resize(kNumBlockHorizontal);
+		worldTransformBlockModels_[i].resize(nNumBlockHorizontal);
 	}
 
 	//キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
-	{
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j)
-		{
-			worldTransformBlockModels_[i][j] = new WorldTransform();
-			worldTransformBlockModels_[i][j]->Initialize();
 
-			if (j % 2 == 0)
+	for (uint32_t i = 0; i < numBlockVirtical; ++i)//縦
+	{
+		for (uint32_t j = 0; j < nNumBlockHorizontal; ++j)//縦
+		{
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock)
+			{
+
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlockModels_[i][j] = worldTransform;
+				worldTransformBlockModels_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+			/*if (j % 2 == 0)
 			{
 				worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
 			}
 			if (i % 2 == 0)
 			{
 				worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
-			}
+			}*/
 		}
 	}
 }
+
 
 

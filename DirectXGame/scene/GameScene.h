@@ -12,6 +12,9 @@
 #include"Player.h"
 #include"Skydome.h"
 #include"MapChipField.h"
+#include<iostream>
+#include<vector>
+#include<string>
 
 /// <summary>
 /// ゲームシーン
@@ -48,7 +51,6 @@ public: // メンバ関数
 	//2-4
 	//表示ブロック
 	void GenerateBlocks();
-
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

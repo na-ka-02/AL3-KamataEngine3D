@@ -25,12 +25,16 @@ public:
 	//マップチップ種別の取得
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 	//マップチップの座標の所得
-	Vector3 GetMapChipPositionByIndex(uint32_t xIndex,uint32_t yIndex);
+	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+	//マップチップのブロック数の取得(縦)
+	int GetNumBlockVirtical();
+	//マップチップのブロック数の取得(横)
+	int GetNumBlockHorizontal();
 
 private:
 	//ブロックのサイズ
-	static inline const float kBlockWidth = 1.0f;
-	static inline const float kBlockHeight = 1.0f;
+	static inline const float kBlockWidth = 2.0f;
+	static inline const float kBlockHeight = 2.0f;
 	//ブロックの個数
 	static inline const uint32_t kNumBlockVirtical = 20;
 	static inline const uint32_t kNumBlockHorizontal = 100;

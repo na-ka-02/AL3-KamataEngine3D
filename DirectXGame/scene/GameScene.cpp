@@ -328,7 +328,7 @@ void GameScene::Draw() {
 
 void GameScene::GenerateBlocks()
 {
-	//2-1
+	//2-4
 	//ブロック
 	//要素数
 	//縦

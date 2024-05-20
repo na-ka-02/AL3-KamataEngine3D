@@ -11,6 +11,7 @@
 #include "vector"
 #include"Player.h"
 #include"Skydome.h"
+#include"MapChipField.h"
 
 /// <summary>
 /// ゲームシーン
@@ -44,6 +45,11 @@ public: // メンバ関数
 	void Draw();
 
 
+	//2-4
+	//表示ブロック
+	void GenerateBlocks();
+
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -53,6 +59,8 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	//天球
 	Skydome* skydome_ = nullptr;
+	//マップチップフィールド
+	MapChipField* mapChipField_;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -96,4 +104,5 @@ private: // メンバ変数
 	//2-3
 	//天球のモデル
 	Model* modelSkydome_ = nullptr;
+
 };

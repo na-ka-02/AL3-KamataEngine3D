@@ -48,7 +48,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//ブロックモデルの読み込み(2-1)
-	textureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
+	textureHandle_ = TextureManager::Load("./Resources./sample.png");
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
@@ -58,8 +58,10 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	//自キャラの生成
 	player_ = new Player();
+	//座標をマップチップ番号で指定
+	Vector3 playerPosition=mapChipField_->GetMapChipPositionByIndex(100,50);
 	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	player_->Initialize(model_, &viewProjection_,playerPosition);
 
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -85,8 +87,6 @@ void GameScene::Initialize() {
 	block_ = Model::Create();
 
 #pragma region 2-1
-
-#pragma endregion
 	/*
 	//2-1
 	//ブロック
@@ -127,6 +127,8 @@ void GameScene::Initialize() {
 			}
 		}
 	}*/
+#pragma endregion
+	
 #pragma endregion
 
 	//サウンドデータの読み込み

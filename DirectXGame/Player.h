@@ -17,7 +17,7 @@ public:
 	/// 初期化
 	/// モデルのポインタ
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -36,4 +36,10 @@ private:
 	uint32_t textureHandle_ = 0u;
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
+	//速度
+	Vector3 velocity_ = {};
+	//加速度
+	static inline const float kAcceleration = 0.5f;
+	//速度減衰
+	static inline const float kAttenuation = 0.5f;
 };

@@ -95,7 +95,7 @@ void Player::Update()
 					std::numbers::pi_v<float>*3.0f / 2.0f
 					};
 					//状態に応じた角度を取得する
-					float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+					//float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 					//自キャラの角度を設定する(線形補間)
 					worldTransform_.rotation_.y = easeIn(turnTimer_);
 				}

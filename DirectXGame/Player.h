@@ -64,5 +64,5 @@ private:
 	//最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 0.49f;
 	//ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 0.98;
+	static inline const float kJumpAcceleration = 0.98f;
 };

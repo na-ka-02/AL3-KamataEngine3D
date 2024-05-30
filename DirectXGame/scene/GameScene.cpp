@@ -39,6 +39,8 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	//マップチップフィールドの解放
 	delete mapChipField_;
+	//追従カメラ
+	delete cameraController_;
 }
 
 void GameScene::Initialize() {
@@ -48,7 +50,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//ブロックモデルの読み込み(2-1)
-	textureHandle_ = TextureManager::Load("./Resources./sample.png");
+	textureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
@@ -59,9 +61,9 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//座標をマップチップ番号で指定
-	Vector3 playerPosition=mapChipField_->GetMapChipPositionByIndex(100,50);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 2);
 	//自キャラの初期化
-	player_->Initialize(model_, &viewProjection_,playerPosition);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
 
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -80,6 +82,9 @@ void GameScene::Initialize() {
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
+
+	//追従カメラ
+	cameraController_->Initialize();
 
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();
@@ -128,7 +133,7 @@ void GameScene::Initialize() {
 		}
 	}*/
 #pragma endregion
-	
+
 #pragma endregion
 
 	//サウンドデータの読み込み
@@ -201,6 +206,11 @@ void GameScene::Update() {
 			voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 		}
 	}
+
+	//追従カメラの更新
+	cameraController_->Update();
+	//デバッグカメラと同じ感じの処理をする
+
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -276,7 +286,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//3Dモデル描画
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	//ブロック
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{

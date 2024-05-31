@@ -42,7 +42,7 @@ private:
 	//速度
 	Vector3 velocity_ = {};
 	//加速度
-	static inline const float kAcceleration = 0.2f;
+	static inline const float kAcceleration = 0.05f;
 	//速度減衰
 	static inline const float kAttenuation = 0.2f;
 	//最大速度制限
@@ -55,7 +55,7 @@ private:
 	};
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
-	float turnFirstRotationY_ = 5.0f / 2.0f;
+	float turnFirstRotationY_ = 2.0f / 2.0f;
 	//旋回タイマー
 	float turnTimer_ = 0.0f;
 	//旋回時間<秒>

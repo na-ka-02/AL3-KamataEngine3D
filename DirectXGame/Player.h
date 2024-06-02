@@ -3,6 +3,9 @@
 #include "WorldTransform.h"
 #include "Model.h"
 #include "ViewProjection.h"
+#include<numbers>
+#include <Input.h>
+#include<algorithm>
 
 class Player
 {
@@ -55,7 +58,7 @@ private:
 	};
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
-	float turnFirstRotationY_ = 2.0f / 2.0f;
+	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f/2.0f;
 	//旋回タイマー
 	float turnTimer_ = 0.0f;
 	//旋回時間<秒>

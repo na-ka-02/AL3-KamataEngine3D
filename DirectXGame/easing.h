@@ -3,9 +3,9 @@
 #include <math.h>
 
 //イージング
-float Ease(float angle1, float angle2, float t)
+float Ease(float start, float finish, float t)
 {
-	return (1.0f - t) * angle1 + t * angle2;
+	return (1.0f - t) * start + t * finish;
 }
 
 //イーズイン

@@ -25,7 +25,7 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 	worldTransform_.translation_ = position;
 	viewProjection_ = viewProjection;
 	//初期回転
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+	worldTransform_.rotation_.y = 5.0f / 2.0f;
 }
 
 void Player::Update()
@@ -154,19 +154,19 @@ void Player::Update()
 
 	//旋回制御
 	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= 4.0f / 60.0f;
+		turnTimer_ -= 2.0f / 60.0f;
 		{
 			//左右の自キャラ角度テーブル
 			float destinationRotationYTable[] =
 			{
-			std::numbers::pi_v < float>*2.0f / 2.0f,
+			std::numbers::pi_v < float> / 2.0f,
 			std::numbers::pi_v<float>*3.0f / 2.0f
 			};
 			//状態に応じた角度を取得する
 			float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 
 			//自キャラの角度を設定する(線形補間)
-			worldTransform_.rotation_.y = Ease(destinationRotationY, turnFirstRotationY_, turnTimer_);
+			worldTransform_.rotation_.y = Ease(turnFirstRotationY_, destinationRotationY, turnTimer_);
 		}
 	}
 	//移動

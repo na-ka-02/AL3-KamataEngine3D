@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(ViewProjection* viewProjection);
 
 	/// <summary>
 	/// 更新
@@ -40,11 +40,6 @@ public:
 	/// </summary>
 	void Reset();
 
-	/// <summary>
-	/// ワールドトランスフォームを取得
-	/// </summary>
-	//const WorldTransform& Player::GetWorldTransform(){return worldTransform_};
-
 private:
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
@@ -52,4 +47,14 @@ private:
 	Player* target_ = nullptr;
 	//追跡対象とカメラの座標の差
 	Vector3 targetOffset_ = { 0,0,-15.0f };
+	//矩形
+	struct Rect
+	{
+		float left = 0.0f;//左端
+		float right = 1.0f;//右端
+		float bottom = 0.0f;//下端
+		float top = 1.0f;//上端
+	};
+	//カメラ移動範囲
+	Rect movableArea_ = { 0,100,0,100 };
 };

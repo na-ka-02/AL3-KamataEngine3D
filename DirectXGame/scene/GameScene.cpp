@@ -67,24 +67,31 @@ void GameScene::Initialize() {
 
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	//天球の生成
+	//天球の生成(2-3)
 	skydome_ = new Skydome();
-	//天球の初期化
+	//天球の初期化(2-3)
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	//マップチップの呼び出し(2-4)
 	mapChipField_ = new MapChipField;
-	//マップチップファイルの読み込み
+	//マップチップファイルの読み込み(2-4)
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-	//マップチップの生成
+	//マップチップの生成(2-4)
 	GenerateBlocks();
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
 
-	//追従カメラ
-	cameraController_->Initialize();
+	//カメラコントローラ(2-5)
+	cameraController_->Initialize(&viewProjection_);
+	//カメラコントローラの初期化(2-5)
+	cameraController_=new CameraController;
+	//追従対象をセット(2-5)
+	cameraController_->SetTarget(player_);
+	//リセット(瞬間合わせ)(2-5)
+	cameraController_->Reset();
+
 
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();
@@ -237,7 +244,7 @@ void GameScene::Update() {
 	}
 	else
 	{
-		//
+		//ビューポートの行列更新
 		viewProjection_.UpdateMatrix();
 	}
 

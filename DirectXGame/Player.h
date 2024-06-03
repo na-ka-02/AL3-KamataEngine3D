@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	//const WorldTransform& Player::GetWolrdTransform();
+	WorldTransform& GetWolrdTransform(){ return worldTransform_; }
 private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;

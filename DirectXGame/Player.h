@@ -30,9 +30,14 @@ public:
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// 
+	/// ワールドトランスフォームを返す
 	/// </summary>
-	WorldTransform& GetWolrdTransform(){ return worldTransform_; }
+	WorldTransform& GetWolrdTransform() { return worldTransform_; }
+	/// <summary>
+	/// 追従カメラの速度加算
+	/// </summary>
+	const Vector3& GetVelocity()const { return velocity_; }
+
 private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -58,7 +63,7 @@ private:
 	};
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
-	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f/2.0f;
+	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f / 2.0f;
 	//旋回タイマー
 	float turnTimer_ = 0.0f;
 	//旋回時間<秒>
@@ -72,5 +77,5 @@ private:
 	//ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 2.0f;
 	//摩擦
-	static inline const float kAttenuationLanding=0.02f;
+	static inline const float kAttenuationLanding = 0.02f;
 };

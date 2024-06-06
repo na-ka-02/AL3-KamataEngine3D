@@ -8,6 +8,12 @@ float Ease(float start, float finish, float t)
 	return (1.0f - t) * start + t * finish;
 }
 
+//イージング(Vector3)
+Vector3 Lerp(Vector3 start,Vector3 index,float time)
+{
+
+}
+
 //イーズイン
 float EaseIn(float x)
 {

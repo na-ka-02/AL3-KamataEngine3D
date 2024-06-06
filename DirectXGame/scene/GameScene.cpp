@@ -91,7 +91,8 @@ void GameScene::Initialize() {
 	cameraController_->SetTarget(player_);
 	//リセット(瞬間合わせ)(2-5)
 	cameraController_->Reset();
-
+	//移動範囲の指定
+	cameraController_->SetMovableArea(movableArea_);
 
 	//ブロックモデル(2-1)
 	blockModel_ = Model::Create();

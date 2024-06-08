@@ -111,5 +111,5 @@ private: // メンバ変数
 	Model* modelSkydome_ = nullptr;
 
 	//カメら移動範囲
-	 Rect movableArea_ = { 15,100,7,100 };
+	 Rect movableArea_ = { 13,185,7,100 };
 };

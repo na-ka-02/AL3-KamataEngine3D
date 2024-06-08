@@ -50,11 +50,11 @@ private:
 	//速度
 	Vector3 velocity_ = {};
 	//加速度
-	static inline const float kAcceleration = 0.05f;
+	static inline const float kAcceleration = 0.03f;
 	//速度減衰
-	static inline const float kAttenuation = 0.2f;
+	static inline const float kAttenuation = 0.1f;
 	//最大速度制限
-	static inline const float kLimitRunSpeed = 2.0f;
+	static inline const float kLimitRunSpeed = 1.3f;
 	//キャラの左右の向き
 	enum class LRDirection
 	{

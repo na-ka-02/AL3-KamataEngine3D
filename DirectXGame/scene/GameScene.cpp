@@ -83,10 +83,11 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
 
-	//カメラコントローラ(2-5)
-	cameraController_->Initialize(&viewProjection_);
+	
 	//カメラコントローラの初期化(2-5)
 	cameraController_=new CameraController;
+	//カメラコントローラ(2-5)
+	cameraController_->Initialize(&viewProjection_);
 	//追従対象をセット(2-5)
 	cameraController_->SetTarget(player_);
 	//リセット(瞬間合わせ)(2-5)
@@ -215,11 +216,7 @@ void GameScene::Update() {
 		}
 	}
 
-	//追従カメラの更新
-	cameraController_->Update();
-	//デバッグカメラと同じ感じの処理をする
-
-
+	
 	//デバッグカメラの更新
 	debugCamera_->Update();
 
@@ -248,6 +245,17 @@ void GameScene::Update() {
 		//ビューポートの行列更新
 		viewProjection_.UpdateMatrix();
 	}
+
+	//追従カメラの更新
+	cameraController_->Update();
+	//デバッグカメラと同じ感じの処理をする
+	//追従カメラのビュー行列
+	viewProjection_.matView = cameraController_->GetViewProjection().matView;
+	//追従カメラのプロジェクション行列
+	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+	//ビュープロジェクション行列の更新と転送
+	viewProjection_.TransferMatrix();
+
 
 	//デバックテキストの表示開始
 	ImGui::Begin("Debug1");

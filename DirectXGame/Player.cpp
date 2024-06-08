@@ -159,7 +159,7 @@ void Player::Update()
 			//左右の自キャラ角度テーブル
 			float destinationRotationYTable[] =
 			{
-			std::numbers::pi_v < float> / 2.0f,
+			std::numbers::pi_v < float> *5.0f/ 2.0f,
 			std::numbers::pi_v<float>*3.0f / 2.0f
 			};
 			//状態に応じた角度を取得する

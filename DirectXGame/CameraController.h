@@ -55,6 +55,12 @@ public:
 	/// </summary>
 	void SetMovableArea(Rect area) { movableArea_ = area; }
 
+	/// <summary>
+	/// ビュープロジェクションを取得
+	/// </summary>
+	/// <returns>ビュープロジェクション</returns>
+	const ViewProjection& GetViewProjection() { return *viewProjection_; }
+
 private:
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
@@ -67,9 +73,9 @@ private:
 	//座標補間割合
 	static inline const float kInteerpolationRate = 1.6f;
 	//速度掛け率
-	static inline const float kVelocityBias = 0.3f;
+	static inline const float kVelocityBias = 3.0f;
 	//追従対象の各方向へのカメラ移動範囲
-	static inline const Rect margin={50,-50,50,-50};
+	static inline const Rect margin={-20,20,-50,50};
 	//カメラ移動範囲
 	Rect movableArea_ = { 0,100,0,100 };
 };

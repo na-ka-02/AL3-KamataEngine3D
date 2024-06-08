@@ -110,4 +110,6 @@ private: // メンバ変数
 	//天球のモデル
 	Model* modelSkydome_ = nullptr;
 
+	//カメら移動範囲
+	 Rect movableArea_ = { 0,100,0,100 };
 };

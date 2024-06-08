@@ -3,25 +3,29 @@
 #include <math.h>
 
 //イージング
-float Ease(float start, float finish, float t)
+inline float Ease(float start, float finish, float t)
 {
 	return (1.0f - t) * start + t * finish;
 }
 
 //イージング(Vector3)
-Vector3 Lerp(Vector3 start,Vector3 index,float time)
+ inline Vector3 Lerp(Vector3 start, Vector3 index, float time)
 {
-	return (1.0f - time) * start + time * index;
+	Vector3 result = {};
+	result.x = (1.0f - time) * start.x + time * index.x;
+	result.y = (1.0f - time) * start.y + time * index.y;
+	result.z = (1.0f - time) * start.z + time * index.z;
+	return result;
 }
 
 //イーズイン
-float EaseIn(float x)
+inline float EaseIn(float x)
 {
 	return 1.0f - cosf((x * (float)M_PI) / 2);
 }
 
 //イーズアウト
-float EaseOut(float x)
+inline float EaseOut(float x)
 {
 	return sinf((x * (float)M_PI) / 2);
 }

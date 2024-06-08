@@ -1,6 +1,16 @@
 ﻿#pragma once
 #include "ViewProjection.h"
 
+//矩形
+struct Rect
+{
+	float left = 0.0f;//左端
+	float right = 1.0f;//右端
+	float bottom = 0.0f;//下端
+	float top = 1.0f;//上端
+};
+
+
 //前方宣言
 class Player;
 
@@ -60,15 +70,8 @@ private:
 	static inline const float kVelocityBias = 0.3f;
 	//追従対象の各方向へのカメラ移動範囲
 	static inline const Rect margin={50,-50,50,-50};
+	//カメラ移動範囲
+	Rect movableArea_ = { 0,100,0,100 };
 };
 
-//矩形
-struct Rect
-{
-	float left = 0.0f;//左端
-	float right = 1.0f;//右端
-	float bottom = 0.0f;//下端
-	float top = 1.0f;//上端
-};
-//カメラ移動範囲
-Rect movableArea_ = { 0,100,0,100 };
+

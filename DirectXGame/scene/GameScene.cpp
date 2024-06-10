@@ -79,6 +79,14 @@ void GameScene::Initialize() {
 	//マップチップの生成(2-4)
 	GenerateBlocks();
 
+	//マップチップの当たり判定(2-7)
+	//自キャラの生成
+	player_=new Player;
+	//自キャラの初期化
+	player_->Initialize(model_,&viewProjection_,playerPosition);
+	//プレイヤーがいるマップチップの情報
+	player_->SetMapChipField(mapChipField_);
+
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);

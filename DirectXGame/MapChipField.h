@@ -15,6 +15,12 @@ struct MapChipDate
 	std::vector<std::vector<MapChipType>>data;
 };
 
+struct IndexSet
+{
+	uint32_t xIndex;
+	uint32_t yIndex;
+};
+
 class MapChipField
 {
 public:
@@ -30,6 +36,8 @@ public:
 	int GetNumBlockVirtical();
 	//マップチップのブロック数の取得(横)
 	int GetNumBlockHorizontal();
+	//座標からマップチップ番号を計算
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
 private:
 	//ブロックのサイズ

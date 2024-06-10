@@ -95,5 +95,18 @@ int MapChipField::GetNumBlockHorizontal()
 	return kNumBlockHorizontal;
 }
 
+//座標からマップチップ番号を計算
+IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position)
+{
+	IndexSet indexSet = {};
+	indexSet.xIndex = (int(position.x) + kBlockWidth / 2) / kBlockWidth;//x座標
+	indexSet.yIndex = (int(position.y) + kBlockHeight / 2) / kBlockHeight;//y座標
+
+	int32_t maxIndexY = kNumBlockVirtical - 1 - indexSet.yIndex;
+	maxIndexY=position.y;
+
+	return IndexSet(indexSet);
+}
+
 
 

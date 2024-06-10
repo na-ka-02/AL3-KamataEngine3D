@@ -7,6 +7,27 @@
 #include <Input.h>
 #include<algorithm>
 
+class MapChipField;
+
+//キャラの左右の向き
+enum class LRDirection
+{
+	kRight,
+	kLeft,
+};
+//衝突判定フラグ
+struct CollisionMapInfo
+{
+	//天井衝突フラグ
+	bool ceiling = false;
+	//着地フラグ
+	bool landing = false;
+	//壁接触フラグ
+	bool hitWall = false;
+	//移動量
+	Vector3 move;
+};
+
 class Player
 {
 public:
@@ -30,6 +51,10 @@ public:
 	/// </summary>
 	void Draw();
 	/// <summary>
+	/// 移動処理関数
+	/// </summary>
+	void keyPush();
+	/// <summary>
 	/// ワールドトランスフォームを返す
 	/// </summary>
 	WorldTransform& GetWolrdTransform() { return worldTransform_; }
@@ -37,8 +62,24 @@ public:
 	/// 追従カメラの速度加算
 	/// </summary>
 	const Vector3& GetVelocity()const { return velocity_; }
+	/// <summary>
+	/// マップチップの情報を取得
+	/// </summary>
+	void SetMapChipField(MapChipField* mapChipfield);
 
 private:
+	/// <summary>
+	/// 移動処理関数
+	/// </summary>
+	void CollisionMap(CollisionMapInfo& info);
+	void CollisionMapTop(CollisionMapInfo&info);
+	void CollisionMapBottom(CollisionMapInfo& info);
+	void CollisionMapRight(CollisionMapInfo& info);
+	void CollisionMapLeft(CollisionMapInfo& info);
+	/// <summary>
+	/// 指定した角の座標計算
+	/// </summary>
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	//3Dモデル
@@ -47,6 +88,8 @@ private:
 	uint32_t textureHandle_ = 0u;
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
+	//マップチップによるフィールド
+	MapChipField* mapChipField_ = nullptr;
 	//速度
 	Vector3 velocity_ = {};
 	//加速度
@@ -55,12 +98,6 @@ private:
 	static inline const float kAttenuation = 0.1f;
 	//最大速度制限
 	static inline const float kLimitRunSpeed = 1.3f;
-	//キャラの左右の向き
-	enum class LRDirection
-	{
-		kRight,
-		kLeft,
-	};
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
 	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f / 2.0f;
@@ -78,4 +115,7 @@ private:
 	static inline const float kJumpAcceleration = 2.0f;
 	//摩擦
 	static inline const float kAttenuationLanding = 0.02f;
+	//キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;//横
+	static inline const float kHeight = 0.8f;//縦
 };

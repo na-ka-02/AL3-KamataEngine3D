@@ -1,10 +1,21 @@
 ﻿#define NOMINMAX
 #include "Player.h"
+#include"MapChipField.h"
 #include <cassert>
 #include<numbers>
 #include <Input.h>
 #include<algorithm>
 #include<easing.h>
+
+//角
+enum Corner
+{
+	kRightBootom,//右下
+	kLeftBottom,//左下
+	kRightTop,//右上
+	kLeftTop,//左上
+	kNumCorner//要素数
+};
 
 Player::Player()
 {
@@ -35,73 +46,8 @@ void Player::Update()
 	//地面についている時
 	if (onGround_)
 	{
-		//	//移動入力
-		//	//左右移動操作
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
-		{
-			//左右加速
-			Vector3 acceleration = {};
-			//		//右入力
-			if (Input::GetInstance()->PushKey(DIK_RIGHT))
-			{
-				//左移動中の右入力
-				if (velocity_.x < 0.0f)
-				{
-					velocity_.x *= (1.0f - kAcceleration);
-				}
-				//右向き
-				if (lrDirection_ != LRDirection::kRight)
-				{
-					lrDirection_ = LRDirection::kRight;
-					//旋回開始時の角度を記録
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					//旋回タイマーに時間を設定
-					turnTimer_ = 1.0f;
-				}
-				//加速度
-				acceleration.x += kAcceleration;
-			}
-			//左入力
-			else if (Input::GetInstance()->PushKey(DIK_LEFT))
-			{
-				//右移動中の左入力
-				if (velocity_.x > 0.0f)
-				{
-					velocity_.x *= (1.0f - kAttenuation);
-				}
-				//左向き
-				if (lrDirection_ != LRDirection::kLeft)
-				{
-					lrDirection_ = LRDirection::kLeft;
-					//旋回開始時の角度を記録
-					turnFirstRotationY_= worldTransform_.rotation_.y;
-					//旋回タイマーに時間を設定
-					turnTimer_ = 1.0f;
-				}
-				//加速度
-				acceleration.x -= kAcceleration;
-			}
-
-			//加速 / 減速
-			velocity_ += acceleration;
-			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
-		}//速度減衰
-		else
-		{
-			///非入力時は移動減衰をかける
-			velocity_.x *= (1 - kAttenuation);
-			if (velocity_.x * velocity_.x < 0.001f)
-			{
-				velocity_.x = 0;
-			}
-		}
-
-		//ジャンプ処理
-		if (Input::GetInstance()->TriggerKey(DIK_UP))
-		{
-			//ジャンプ初速
-			velocity_ += Vector3(0, kJumpAcceleration, 0);
-		}
+		//移動入力
+		keyPush();
 	}
 	//空中
 	else
@@ -151,6 +97,16 @@ void Player::Update()
 		}
 	}
 
+	//衝突判定を初期化
+	CollisionMapInfo collisionMapInfo;
+	//移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+
+	//マップチップ衝突チェック
+	CollisionMap(collisionMapInfo);
+
+	//移動
+	worldTransform_.translation_ += velocity_;
 
 	//旋回制御
 	if (turnTimer_ > 0.0f) {
@@ -159,7 +115,7 @@ void Player::Update()
 			//左右の自キャラ角度テーブル
 			float destinationRotationYTable[] =
 			{
-			std::numbers::pi_v < float> *5.0f/ 2.0f,
+			std::numbers::pi_v < float> *5.0f / 2.0f,
 			std::numbers::pi_v<float>*3.0f / 2.0f
 			};
 			//状態に応じた角度を取得する
@@ -169,8 +125,6 @@ void Player::Update()
 			worldTransform_.rotation_.y = Ease(turnFirstRotationY_, destinationRotationY, turnTimer_);
 		}
 	}
-	//移動
-	worldTransform_.translation_ += velocity_;
 	//行列計算
 	worldTransform_.UpdateMatrix();
 }
@@ -179,4 +133,146 @@ void Player::Draw()
 {
 	//3Dモデル描画
 	model_->Draw(worldTransform_, *viewProjection_);
+}
+
+//キー入力
+void Player::keyPush()
+{
+	//左右移動操作
+	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
+	{
+		//左右加速
+		Vector3 acceleration = {};
+		//		//右入力
+		if (Input::GetInstance()->PushKey(DIK_RIGHT))
+		{
+			//左移動中の右入力
+			if (velocity_.x < 0.0f)
+			{
+				velocity_.x *= (1.0f - kAcceleration);
+			}
+			//右向き
+			if (lrDirection_ != LRDirection::kRight)
+			{
+				lrDirection_ = LRDirection::kRight;
+				//旋回開始時の角度を記録
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				//旋回タイマーに時間を設定
+				turnTimer_ = 1.0f;
+			}
+			//加速度
+			acceleration.x += kAcceleration;
+		}
+		//左入力
+		else if (Input::GetInstance()->PushKey(DIK_LEFT))
+		{
+			//右移動中の左入力
+			if (velocity_.x > 0.0f)
+			{
+				velocity_.x *= (1.0f - kAttenuation);
+			}
+			//左向き
+			if (lrDirection_ != LRDirection::kLeft)
+			{
+				lrDirection_ = LRDirection::kLeft;
+				//旋回開始時の角度を記録
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				//旋回タイマーに時間を設定
+				turnTimer_ = 1.0f;
+			}
+			//加速度
+			acceleration.x -= kAcceleration;
+		}
+
+		//加速 / 減速
+		velocity_ += acceleration;
+		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+	}//速度減衰
+	else
+	{
+		///非入力時は移動減衰をかける
+		velocity_.x *= (1 - kAttenuation);
+		if (velocity_.x * velocity_.x < 0.001f)
+		{
+			velocity_.x = 0;
+		}
+	}
+
+	//ジャンプ処理
+	if (Input::GetInstance()->TriggerKey(DIK_UP))
+	{
+		//ジャンプ初速
+		velocity_ += Vector3(0, kJumpAcceleration, 0);
+	}
+}
+//マップチップの情報
+void Player::SetMapChipField(MapChipField* mapChipfield)
+{
+	mapChipField_ = mapChipfield;
+}
+
+//マップチップとプレイヤーの衝突判定
+void Player::CollisionMap(CollisionMapInfo& info)
+{
+
+}
+
+//移動後の4つの角の座標
+//上角衝突判定
+void Player::CollisionMapTop(CollisionMapInfo& info)
+{
+
+	//上昇あり？
+	if (info.move.y <= 0)
+	{
+		return;
+	}
+	//上
+	std::array<Vector3, static_cast<uint32_t>(Corner::kNumCorner)>positionsNew{};
+	for (uint32_t i = 0; i < positionsNew.size(); ++i)
+	{
+		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i))
+	}
+
+	//マップチップ呼び出し
+	MapChipType  mapChipType;
+	//真上の当たり判定を行う
+	bool hit = false;
+	//左上点の判定
+	IndexSet indexSet{};
+	//座標取得
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	//左上が当たった判定
+	if (mapChipType == MapChipType::kBlock)
+	{
+		hit = true;
+	}
+	//右上点の判定
+
+}
+//下角衝突判定
+void Player::CollisionMapBottom(CollisionMapInfo& info)
+{
+}
+//右角衝突判定
+void Player::CollisionMapRight(CollisionMapInfo& info)
+{
+}
+//左角衝突判定
+void Player::CollisionMapLeft(CollisionMapInfo& info)
+{
+}
+
+//角の当たり判定
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
+{
+	Vector3 conerTabe[kNumCorner] =
+	{
+	{ +kWidth / 2.0f,-kHeight / 2.0f,0 },
+	{ -kWidth / 2.0f,-kHeight / 2.0f,0 },
+	{ +kWidth / 2.0f,+kHeight / 2.0f,0 },
+	{ -kWidth / 2.0f,+kHeight / 2.0f,0 }
+	};
+	return center + offsetTable[static_cast<uint32_t>(center)];
 }

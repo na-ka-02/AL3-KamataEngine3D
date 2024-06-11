@@ -103,9 +103,24 @@ IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position)
 	indexSet.yIndex = (int(position.y) + kBlockHeight / 2) / kBlockHeight;//y座標
 
 	int32_t maxIndexY = kNumBlockVirtical - 1 - indexSet.yIndex;
-	maxIndexY=position.y;
+	maxIndexY = position.y;
 
 	return IndexSet(indexSet);
+}
+
+//ブロックの範囲取得関数
+Rect MapChipField::GetRectbyIndex(uint32_t xIndex, uint32_t yIndex)
+{
+	//指定ブロックの中心座標を取得する
+	Vector3 center = GetMapChipPositionByIndex(xIndex, yIndex);
+
+	Rect rect{};
+	rect.left = center.x - kBlockWidth / 2.0f;    //左端
+	rect.right = center.x + kBlockWidth / 2.0f;   //右端
+	rect.bottom = center.y + kBlockHeight / 2.0f; //下端
+	rect.top = center.y + kBlockHeight / 2.0f;    //上端
+
+	return Rect(rect);
 }
 
 

@@ -249,7 +249,15 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 		hit = true;
 	}
 	//右上点の判定
-
+	IndexSet indexSet{};
+	//座標取得
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	//右上が当たった判定
+	if (mapChipType == MapChipType::kBlock)
+	{
+		hit = true;
+	}
 }
 //下角衝突判定
 void Player::CollisionMapBottom(CollisionMapInfo& info)

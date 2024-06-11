@@ -10,15 +10,26 @@ enum class MapChipType
 	kBlock//ブロック
 };
 
+//マップチップのデータの読み込み
 struct MapChipDate
 {
 	std::vector<std::vector<MapChipType>>data;
 };
 
+//座標からマップチップ番号を計算
 struct IndexSet
 {
-	uint32_t xIndex;
-	uint32_t yIndex;
+	uint32_t xIndex;//x
+	uint32_t yIndex;//y
+};
+
+//ブロックの範囲
+struct Rect
+{
+	float left;  //左端
+	float right; //右端
+	float bottom;//下端
+	float top;   //上端
 };
 
 class MapChipField
@@ -38,6 +49,8 @@ public:
 	int GetNumBlockHorizontal();
 	//座標からマップチップ番号を計算
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+	//ブロックの範囲取得関数
+	Rect GetRectbyIndex(uint32_t xIndex, uint32_t yIndex);
 
 private:
 	//ブロックのサイズ

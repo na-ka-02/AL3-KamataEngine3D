@@ -7,95 +7,28 @@
 //Vector3& operator+(const Vector3& num1, const Vector3& num2)
 //{
 //	// TODO: return ステートメントをここに挿入します
-//	return num1+num2;
-//}
-//
-////足し算(Vector3 + float)
-//Vector3& operator+(const Vector3& num1, const float num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x + num2;
-//	answerNum.y = num1.y + num2;
-//	answerNum.z = num1.z + num2;
-//
-//	return answerNum;
+//	return num1 - num2;
 //}
 //
 ////引き算(Vector3-Vector3)
 //Vector3& operator-(const Vector3& num1, const Vector3& num2)
 //{
 //	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x - num2.x;
-//	answerNum.y = num1.y - num2.y;
-//	answerNum.z = num1.z - num2.z;
-//
-//	return answerNum;
-//}
-////引き算(Vector3-float)
-//Vector3& operator-(const Vector3& num1, const float num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x - num2;
-//	answerNum.y = num1.y - num2;
-//	answerNum.z = num1.z - num2;
-//
-//	return (answerNum);
+//	return num1 - num2;
 //}
 //
 ////割り算(Vector3%Vector3)
 //Vector3& operator%(const Vector3& num1, const Vector3& num2)
 //{
 //	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x / num2.x;
-//	answerNum.y = num1.y / num2.y;
-//	answerNum.z = num1.z / num2.z;
-//
-//	return answerNum;
-//}
-////割り算(Vector3%float)
-//Vector3& operator%(const Vector3& num1, const float num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x / num2;
-//	answerNum.y = num1.y / num2;
-//	answerNum.z = num1.z / num2;
-//
-//	return answerNum;
+//	return num1 % num2;
 //}
 //
 ////掛け算(Vector3*Vector3)
 //Vector3& operator*(const Vector3& num1, const Vector3& num2)
 //{
 //	// TODO: return ステートメ
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x * num2.x;
-//	answerNum.y = num1.y * num2.y;
-//	answerNum.z = num1.z * num2.z;
-//
-//	return (answerNum);
-//}
-////掛け算(Vector3*Vector3)
-//Vector3& operator*(const Vector3& num1, const float num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	Vector3 answerNum = {};
-//
-//	answerNum.x = num1.x * num2;
-//	answerNum.y = num1.y * num2;
-//	answerNum.z = num1.z * num2;
-//
-//	return answerNum;
+//	return (num1 * num2);
 //}
 
 //加算

@@ -6,6 +6,7 @@
 #include <Input.h>
 #include<algorithm>
 #include<easing.h>
+#include"DebugText.h"
 
 //角
 enum Corner
@@ -211,6 +212,26 @@ void Player::SetMapChipField(MapChipField* mapChipfield)
 	mapChipField_ = mapChipfield;
 }
 
+//判定結果を反映して移動させる
+void Player::resultCollisionMove(const CollisionMapInfo& info)
+{
+	//移動
+	worldTransform_.translation_ += info.move;
+}
+
+//天井に当たったか
+void Player::celingCollision(const CollisionMapInfo& info)
+{
+	//衝突判定を初期化
+	CollisionMapInfo collisionMapInfo;
+	//天井に当たったら表示
+	if (collisionMapInfo.ceiling)
+	{
+		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
+		velocity_.y = 0;
+	}
+}
+
 //マップチップとプレイヤーの衝突判定
 void Player::CollisionMap(CollisionMapInfo& info)
 {
@@ -231,7 +252,7 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 	std::array<Vector3, static_cast<uint32_t>(Corner::kNumCorner)>positionsNew{};
 	for (uint32_t i = 0; i < positionsNew.size(); ++i)
 	{
-		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i))
+		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
 	//マップチップ呼び出し
@@ -249,7 +270,6 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 		hit = true;
 	}
 	//右上点の判定
-	IndexSet indexSet{};
 	//座標取得
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -257,6 +277,18 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock)
 	{
 		hit = true;
+	}
+
+	//ブロックにヒット?
+	if (hit)
+	{
+		//めり込みを排除する方向に移動量を設定する
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+		//めり込み先ブロックの移動矩形
+		MapChipField::Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, kJumpAcceleration);
+		//天井に当たったことを記録する
+		info.ceiling = true;
 	}
 }
 //下角衝突判定
@@ -275,12 +307,12 @@ void Player::CollisionMapLeft(CollisionMapInfo& info)
 //角の当たり判定
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
 {
-	Vector3 conerTabe[kNumCorner] =
+	Vector3 offsetTable[kNumCorner] =
 	{
 	{ +kWidth / 2.0f,-kHeight / 2.0f,0 },
 	{ -kWidth / 2.0f,-kHeight / 2.0f,0 },
 	{ +kWidth / 2.0f,+kHeight / 2.0f,0 },
 	{ -kWidth / 2.0f,+kHeight / 2.0f,0 }
 	};
-	return center + offsetTable[static_cast<uint32_t>(center)];
+	return center + offsetTable[static_cast<uint32_t>(corner)];
 }

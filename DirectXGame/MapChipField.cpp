@@ -99,11 +99,11 @@ int MapChipField::GetNumBlockHorizontal()
 IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position)
 {
 	IndexSet indexSet = {};
-	indexSet.xIndex = (int(position.x) + kBlockWidth / 2) / kBlockWidth;//x座標
-	indexSet.yIndex = (int(position.y) + kBlockHeight / 2) / kBlockHeight;//y座標
+	indexSet.xIndex = static_cast<uint32_t>((int(position.x) + kBlockWidth / 2) / kBlockWidth);//x座標
+	indexSet.yIndex = static_cast<uint32_t>((int(position.y) + kBlockHeight / 2) / kBlockHeight);//y座標
 
-	int32_t maxIndexY = kNumBlockVirtical - 1 - indexSet.yIndex;
-	maxIndexY = position.y;
+	uint32_t maxIndexY = kNumBlockVirtical - 1 - indexSet.yIndex;
+	maxIndexY = static_cast<uint32_t>(position.y);
 
 	return IndexSet(indexSet);
 }

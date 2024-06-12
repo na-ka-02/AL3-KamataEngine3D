@@ -66,13 +66,21 @@ public:
 	/// マップチップの情報を取得
 	/// </summary>
 	void SetMapChipField(MapChipField* mapChipfield);
+	/// <summary>
+	/// 判定結果を反映して移動させる
+	/// </summary>
+	void resultCollisionMove(const CollisionMapInfo& info);
+	/// <summary>
+	/// 天井に接触してるか
+	/// </summary>
+	void celingCollision(const CollisionMapInfo& info);
 
 private:
 	/// <summary>
 	/// 移動処理関数
 	/// </summary>
 	void CollisionMap(CollisionMapInfo& info);
-	void CollisionMapTop(CollisionMapInfo&info);
+	void CollisionMapTop(CollisionMapInfo& info);
 	void CollisionMapBottom(CollisionMapInfo& info);
 	void CollisionMapRight(CollisionMapInfo& info);
 	void CollisionMapLeft(CollisionMapInfo& info);
@@ -118,4 +126,6 @@ private:
 	//キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;//横
 	static inline const float kHeight = 0.8f;//縦
+	//ブロックにのめり込む
+	static inline const float kBlank = 0.4f;
 };

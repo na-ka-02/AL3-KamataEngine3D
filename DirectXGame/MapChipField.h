@@ -62,3 +62,4 @@ private:
 	//マップチップのデータ
 	MapChipDate mapChipData_;
 };
+

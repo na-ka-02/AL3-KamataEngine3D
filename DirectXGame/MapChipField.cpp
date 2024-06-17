@@ -100,10 +100,11 @@ IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position)
 {
 	IndexSet indexSet = {};
 	indexSet.xIndex = static_cast<uint32_t>((int(position.x) + kBlockWidth / 2) / kBlockWidth);//x座標
+	//反転前Y番号
 	indexSet.yIndex = static_cast<uint32_t>((int(position.y) + kBlockHeight / 2) / kBlockHeight);//y座標
 
-	uint32_t maxIndexY = kNumBlockVirtical - 1 - indexSet.yIndex;
-	maxIndexY = static_cast<uint32_t>(position.y);
+	uint32_t maxIndexY = kNumBlockVirtical - 1;
+	indexSet.yIndex = maxIndexY - indexSet.yIndex;
 
 	return IndexSet(indexSet);
 }
@@ -117,7 +118,7 @@ Rect MapChipField::GetRectbyIndex(uint32_t xIndex, uint32_t yIndex)
 	Rect rect{};
 	rect.left = center.x - kBlockWidth / 2.0f;    //左端
 	rect.right = center.x + kBlockWidth / 2.0f;   //右端
-	rect.bottom = center.y + kBlockHeight / 2.0f; //下端
+	rect.bottom = center.y - kBlockHeight / 2.0f; //下端
 	rect.top = center.y + kBlockHeight / 2.0f;    //上端
 
 	return Rect(rect);

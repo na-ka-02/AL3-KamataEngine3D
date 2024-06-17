@@ -20,7 +20,7 @@ enum class LRDirection
 //角
 enum Corner
 {
-	kRightBootom,//右下
+	kRightBottom,//右下
 	kLeftBottom,//左下
 	kRightTop,//右上
 	kLeftTop,//左上
@@ -86,6 +86,10 @@ public:
 	/// 天井に接触してるか
 	/// </summary>
 	void celingCollision(const CollisionMapInfo& info);
+	/// <summary>
+	/// 地面に接しているか
+	/// </summary>
+	void groundCollision(const CollisionMapInfo& info);
 
 private:
 	/// <summary>
@@ -133,7 +137,7 @@ private:
 	static inline const float kLimitFallSpeed = 1.5f;
 	//ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 2.0f;
-	//摩擦
+	//摩擦、着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.02f;
 	//キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;//横

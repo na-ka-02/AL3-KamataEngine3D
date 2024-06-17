@@ -3,6 +3,7 @@
 #include<vector>
 #include<string>
 #include"Vector3.h"
+#include"Rect.h"
 
 enum class MapChipType
 {
@@ -21,15 +22,6 @@ struct IndexSet
 {
 	uint32_t xIndex;//x
 	uint32_t yIndex;//y
-};
-
-//ブロックの範囲
-struct Rect
-{
-	float left;  //左端
-	float right; //右端
-	float bottom;//下端
-	float top;   //上端
 };
 
 class MapChipField

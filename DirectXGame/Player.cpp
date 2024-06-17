@@ -9,14 +9,10 @@
 #include"DebugText.h"
 
 //角
-enum Corner
-{
-	kRightBootom,//右下
-	kLeftBottom,//左下
-	kRightTop,//右上
-	kLeftTop,//左上
-	kNumCorner//要素数
-};
+
+//エラー消す
+#pragma warning(disable:4100)
+
 
 Player::Player()
 {
@@ -102,9 +98,9 @@ void Player::Update()
 	CollisionMapInfo collisionMapInfo;
 	//移動量に速度の値をコピー
 	collisionMapInfo.move = velocity_;
-
 	//マップチップ衝突チェック
 	CollisionMap(collisionMapInfo);
+	velocity_ = collisionMapInfo.move;
 
 	//移動
 	worldTransform_.translation_ += velocity_;
@@ -222,10 +218,8 @@ void Player::resultCollisionMove(const CollisionMapInfo& info)
 //天井に当たったか
 void Player::celingCollision(const CollisionMapInfo& info)
 {
-	//衝突判定を初期化
-	CollisionMapInfo collisionMapInfo;
 	//天井に当たったら表示
-	if (collisionMapInfo.ceiling)
+	if (info.ceiling)
 	{
 		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
 		velocity_.y = 0;
@@ -235,7 +229,10 @@ void Player::celingCollision(const CollisionMapInfo& info)
 //マップチップとプレイヤーの衝突判定
 void Player::CollisionMap(CollisionMapInfo& info)
 {
-
+	CollisionMapTop(info);
+	CollisionMapBottom(info);
+	CollisionMapRight(info);
+	CollisionMapLeft(info);
 }
 
 //移動後の4つの角の座標
@@ -262,7 +259,7 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 	//左上点の判定
 	IndexSet indexSet{};
 	//座標取得
-	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[int(Corner::kLeftTop)]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	//左上が当たった判定
 	if (mapChipType == MapChipType::kBlock)
@@ -271,7 +268,7 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 	}
 	//右上点の判定
 	//座標取得
-	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[int(Corner::kRightTop)]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	//右上が当たった判定
 	if (mapChipType == MapChipType::kBlock)
@@ -285,8 +282,8 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 		//めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 		//めり込み先ブロックの移動矩形
-		MapChipField::Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, kJumpAcceleration);
+		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
 		//天井に当たったことを記録する
 		info.ceiling = true;
 	}

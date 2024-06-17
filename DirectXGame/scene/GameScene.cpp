@@ -86,6 +86,8 @@ void GameScene::Initialize() {
 	player_->Initialize(model_,&viewProjection_,playerPosition);
 	//プレイヤーがいるマップチップの情報
 	player_->SetMapChipField(mapChipField_);
+	
+
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);

@@ -3,34 +3,6 @@
 #include <assert.h>
 #include "cmath"
 
-////足し算(Vector3+Vector3)
-//Vector3& operator+(const Vector3& num1, const Vector3& num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	return num1 - num2;
-//}
-//
-////引き算(Vector3-Vector3)
-//Vector3& operator-(const Vector3& num1, const Vector3& num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	return num1 - num2;
-//}
-//
-////割り算(Vector3%Vector3)
-//Vector3& operator%(const Vector3& num1, const Vector3& num2)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	return num1 % num2;
-//}
-//
-////掛け算(Vector3*Vector3)
-//Vector3& operator*(const Vector3& num1, const Vector3& num2)
-//{
-//	// TODO: return ステートメ
-//	return (num1 * num2);
-//}
-
 //加算
 Vector3 Add(const Vector3& v1, const Vector3& v2)
 {

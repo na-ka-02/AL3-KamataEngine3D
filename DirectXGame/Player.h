@@ -15,6 +15,18 @@ enum class LRDirection
 	kRight,
 	kLeft,
 };
+
+
+//角
+enum Corner
+{
+	kRightBootom,//右下
+	kLeftBottom,//左下
+	kRightTop,//右上
+	kLeftTop,//左上
+	kNumCorner//要素数
+};
+
 //衝突判定フラグ
 struct CollisionMapInfo
 {

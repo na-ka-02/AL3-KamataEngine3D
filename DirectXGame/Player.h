@@ -90,6 +90,10 @@ public:
 	/// 地面に接しているか
 	/// </summary>
 	void groundCollision(const CollisionMapInfo& info);
+	/// <summary>
+	///壁に接触しているか 
+	/// </summary>
+	void wallCollision(const CollisionMapInfo& info);
 
 private:
 	/// <summary>
@@ -120,6 +124,8 @@ private:
 	static inline const float kAcceleration = 0.03f;
 	//速度減衰
 	static inline const float kAttenuation = 0.1f;
+	//着地時の速度減衰率
+	static inline const float kAttenuationWall = 0.2f;
 	//最大速度制限
 	static inline const float kLimitRunSpeed = 1.3f;
 	LRDirection lrDirection_ = LRDirection::kRight;
@@ -143,5 +149,5 @@ private:
 	static inline const float kWidth = 0.8f;//横
 	static inline const float kHeight = 0.8f;//縦
 	//ブロックにのめり込む
-	static inline const float kBlank = 0.4f;
+	static inline const float kBlank = 0.8f;
 };

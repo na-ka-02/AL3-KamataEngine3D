@@ -491,7 +491,7 @@ void Player::CollisionMapRight(CollisionMapInfo& info)
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 		//めり込み先ブロックの移動矩形
 		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.move.y = std::max(0.0f, rect.top - worldTransform_.translation_.y - kHeight / 2 - kBlank);
 		//壁に当たったことを記録する
 		info.hitWall = true;
 	}

@@ -14,6 +14,8 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 	viewProjection_ = viewProjection;
 	//初期回転
 	worldTransform_.rotation_.y = 1.0f / 2.0f;
+	//速度を設定する
+	velocity_ = { -kWalkSpeed,0,0 };
 }
 
 //更新
@@ -21,6 +23,8 @@ void Enemy::Update()
 {
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+	//移動
+	worldTransform_.translation_ += velocity_;
 	//行列計算
 	worldTransform_.UpdateMatrix();
 }

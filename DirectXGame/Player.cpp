@@ -324,13 +324,13 @@ void Player::wallCollision(const CollisionMapInfo& info)
 //マップチップとプレイヤーの衝突判定
 void Player::CollisionMap(CollisionMapInfo& info)
 {
-	//上判定
+	////上判定
 	CollisionMapTop(info);
-	//下判定
+	////下判定
 	CollisionMapBottom(info);
-	//右判定
+	////右判定
 	CollisionMapRight(info);
-	//左判定
+	////左判定
 	CollisionMapLeft(info);
 }
 
@@ -382,10 +382,9 @@ void Player::CollisionMapTop(CollisionMapInfo& info)
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 		//めり込み先ブロックの移動矩形
 		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.top - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
 		//天井に当たったことを記録する
 		info.ceiling = true;
-
 	}
 }
 
@@ -421,7 +420,7 @@ void Player::CollisionMapBottom(CollisionMapInfo& info)
 	//座標取得
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[int(Corner::kRightBottom)]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	//右上が当たった判定
+	//右下が当たった判定
 	if (mapChipType == MapChipType::kBlock)
 	{
 		hit = true;
@@ -434,9 +433,9 @@ void Player::CollisionMapBottom(CollisionMapInfo& info)
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 		//めり込み先ブロックの移動矩形
 		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
-		//天井に当たったことを記録する
-		info.ceiling = true;
+		info.move.y = std::min(0.0f, rect.top - worldTransform_.translation_.y + kHeight / 2 + kBlank);
+		//床に当たったことを記録する
+		info.landing = true;
 	}
 }
 
@@ -488,7 +487,7 @@ void Player::CollisionMapRight(CollisionMapInfo& info)
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 		//めり込み先ブロックの移動矩形
 		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.top - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.move.x = std::max(0.0f, rect.left - worldTransform_.translation_.x + kWidth / 2 - kBlank);
 		//壁に当たったことを記録する
 		info.hitWall = true;
 	}
@@ -542,7 +541,7 @@ void Player::CollisionMapLeft(CollisionMapInfo& info)
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 		//めり込み先ブロックの移動矩形
 		Rect rect = mapChipField_->GetRectbyIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.move.x = std::min(0.0f, rect.right - worldTransform_.translation_.x - kWidth / 2 + kBlank);
 		//壁に当たったことを記録する
 		info.hitWall = true;
 	}

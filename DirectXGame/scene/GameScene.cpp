@@ -17,6 +17,8 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	//自キャラ
 	delete player_;
+	//敵キャラ
+	delete enemy_;
 	//天球
 	delete skydome_;
 	//ブロック
@@ -57,13 +59,22 @@ void GameScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, { 1000,100 });
 
 	//3Dモデルの生成(1-3)
-	model_ = Model::CreateFromOBJ("player",true);
+	model_ = Model::CreateFromOBJ("player", true);
 	//自キャラの生成
 	player_ = new Player();
 	//座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	//自キャラの初期化
 	player_->Initialize(model_, &viewProjection_, playerPosition);
+
+	//3Dモデルの生成(1-3)
+	model_ = Model::CreateFromOBJ("player", true);
+	//敵キャラの生成
+	enemy_ = new Enemy();
+	//座標をマップチップ番号で指定
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
+	//敵キャラの初期化
+	enemy_->Initialize(model_, &viewProjection_, enemyPosition);
 
 	//3Dモデルの生成(2-3の天球)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -81,21 +92,21 @@ void GameScene::Initialize() {
 
 	//マップチップの当たり判定(2-7)
 	//自キャラの生成
-	player_=new Player;
+	player_ = new Player;
 	//自キャラの初期化
-	player_->Initialize(model_,&viewProjection_,playerPosition);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
 	//プレイヤーがいるマップチップの情報
 	player_->SetMapChipField(mapChipField_);
-	
+
 
 
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
 
-	
+
 	//カメラコントローラの初期化(2-5)
-	cameraController_=new CameraController;
+	cameraController_ = new CameraController;
 	//カメラコントローラ(2-5)
 	cameraController_->Initialize(&viewProjection_);
 	//追従対象をセット(2-5)
@@ -189,6 +200,8 @@ void GameScene::Update() {
 
 	//自キャラの更新
 	player_->Update();
+	//敵キャラの更新
+	enemy_->Update();
 	//天球の更新
 	skydome_->Update();
 	//ブロックの更新
@@ -226,7 +239,7 @@ void GameScene::Update() {
 		}
 	}
 
-	
+
 	//デバッグカメラの更新
 	debugCamera_->Update();
 
@@ -328,7 +341,9 @@ void GameScene::Draw() {
 
 	//自キャラの描画
 	player_->Draw();
-
+	//敵キャラの描画
+	enemy_->Draw();
+	//天球の描画
 	skydome_->Draw();
 
 	//デバッグカメラ←3Dモデル直下に書く

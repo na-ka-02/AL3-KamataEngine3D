@@ -13,6 +13,7 @@
 #include"Skydome.h"
 #include"MapChipField.h"
 #include"CameraController.h"
+#include"Enemy.h"
 #include<iostream>
 #include<vector>
 #include<string>
@@ -60,6 +61,8 @@ private: // メンバ変数
 
 	//自キャラ
 	Player* player_ = nullptr;
+	//敵キャラ
+	Enemy* enemy_ = nullptr;
 	//天球
 	Skydome* skydome_ = nullptr;
 	//マップチップフィールド
@@ -111,5 +114,5 @@ private: // メンバ変数
 	Model* modelSkydome_ = nullptr;
 
 	//カメら移動範囲
-	 Rect movableArea_ = { 13,185,7,100 };
+	Rect movableArea_ = { 13,185,7,100 };
 };

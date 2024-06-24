@@ -125,9 +125,9 @@ private:
 	//速度減衰
 	static inline const float kAttenuation = 0.1f;
 	//着地時の速度減衰率
-	static inline const float kAttenuationWall = 0.8f;
+	static inline const float kAttenuationWall = 0.1f;
 	//最大速度制限
-	static inline const float kLimitRunSpeed = 1.3f;
+	static inline const float kLimitRunSpeed = 0.6f;
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
 	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f / 2.0f;
@@ -142,7 +142,7 @@ private:
 	//最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 1.5f;
 	//ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 2.0f;
+	static inline const float kJumpAcceleration = 1.5f;
 	//摩擦、着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.02f;
 	//キャラクターの当たり判定サイズ

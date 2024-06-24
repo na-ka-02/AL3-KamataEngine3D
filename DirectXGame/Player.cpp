@@ -2,9 +2,6 @@
 #include "Player.h"
 #include"MapChipField.h"
 #include <cassert>
-#include<numbers>
-#include <Input.h>
-#include<algorithm>
 #include<easing.h>
 #include"DebugText.h"
 

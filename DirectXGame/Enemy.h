@@ -2,8 +2,8 @@
 #include "WorldTransform.h"
 #include "Model.h"
 #include "ViewProjection.h"
+#define _USE_MATH_DEFINES
 #include "math.h"
-#define _USE_
 
 class Enemy
 {
@@ -35,9 +35,11 @@ private:
 	//速度
 	Vector3 velocity_ = {};
 	//最初の角度
-	static inline const float kWalkMotionAngleStart = 0.0f;
+	static inline const float kWalkMotionAngleStart = cos((2 / 3) * M_PI);
 	//アニメーションの周期となる時間[秒]
 	static inline const float kWalkMotionTime = 0.5f;
 	//最後の角度
-	static inline const float lWalkMotionAngleEnd = sinf(2*M_PI);
+	static inline const float lWalkMotionAngleEnd = cos((4 / 3) * M_PI);
+	//経過時間
+	float walkTimer_ = 0.0f;
 };

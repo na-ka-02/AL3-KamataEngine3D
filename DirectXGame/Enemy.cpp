@@ -16,6 +16,8 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 	worldTransform_.rotation_.y = 1.0f / 2.0f;
 	//速度を設定する
 	velocity_ = { -kWalkSpeed,0,0 };
+	//経過時間
+	walkTimer_ = 0.0f;
 }
 
 //更新
@@ -23,6 +25,12 @@ void Enemy::Update()
 {
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+	//タイマーを加算	
+	walkTimer_ += 1.0f / 60.0f;
+	//回転アニメーション
+	float param = std::sin(180 / M_PI);
+	float radian = kWalkMotionAngleStart + lWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
+	worldTransform_.translation_.x = std::sin(radian);
 	//移動
 	worldTransform_.translation_ += velocity_;
 	//行列計算

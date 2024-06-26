@@ -35,11 +35,11 @@ private:
 	//速度
 	Vector3 velocity_ = {};
 	//最初の角度
-	static inline const float kWalkMotionAngleStart = cos((2 / 3) * M_PI);
+	static inline const float kWalkMotionAngleStart = static_cast<float>(cosf((2 / 3) * M_PI));
 	//アニメーションの周期となる時間[秒]
 	static inline const float kWalkMotionTime = 0.5f;
 	//最後の角度
-	static inline const float lWalkMotionAngleEnd = cos((4 / 3) * M_PI);
+	static inline const float lWalkMotionAngleEnd = static_cast<float>(cos((4 / 3) * M_PI));
 	//経過時間
 	float walkTimer_ = 0.0f;
 };

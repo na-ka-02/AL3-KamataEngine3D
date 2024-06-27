@@ -102,7 +102,7 @@ public:
 	/// <summary>
 	/// AABB取得
 	/// </summary>
-	AABB GetABB();
+	//AABB GetABB();
 
 private:
 	/// <summary>

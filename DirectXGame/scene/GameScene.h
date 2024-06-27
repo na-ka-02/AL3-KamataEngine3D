@@ -49,7 +49,6 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-
 	//2-4
 	//表示ブロック
 	void GenerateBlocks();
@@ -62,6 +61,7 @@ private: // メンバ変数
 	//自キャラ
 	Player* player_ = nullptr;
 	//敵キャラ
+	//std::list<Enemy*>enemies_;
 	Enemy* enemy_ = nullptr;
 	//天球
 	Skydome* skydome_ = nullptr;

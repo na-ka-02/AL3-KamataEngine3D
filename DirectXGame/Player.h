@@ -1,11 +1,12 @@
 ﻿#pragma once
 #pragma once
-#include "WorldTransform.h"
-#include "Model.h"
-#include "ViewProjection.h"
 #include<numbers>
 #include <Input.h>
 #include<algorithm>
+#include "WorldTransform.h"
+#include "Model.h"
+#include "ViewProjection.h"
+#include "mathMT.h"
 
 class MapChipField;
 
@@ -94,6 +95,14 @@ public:
 	///壁に接触しているか 
 	/// </summary>
 	void wallCollision(const CollisionMapInfo& info);
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition();
+	/// <summary>
+	/// AABB取得
+	/// </summary>
+	AABB GetABB();
 
 private:
 	/// <summary>

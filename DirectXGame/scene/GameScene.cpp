@@ -18,6 +18,8 @@ GameScene::~GameScene() {
 	//自キャラ
 	delete player_;
 	//敵キャラ
+	//for(std::vector<Enemy*>&enemy)
+
 	delete enemy_;
 	//天球
 	delete skydome_;
@@ -70,6 +72,15 @@ void GameScene::Initialize() {
 	//3Dモデルの生成(1-3)
 	model_ = Model::CreateFromOBJ("player", true);
 	//敵キャラの生成
+	/*for (int32_t i = 0; i < 4;++i)
+	{
+	Enemy*newEnemy=new Enemy();
+	Vector3 enemyPosition={2,40,0};
+	newEnemy->Initialize(model_, &viewProjection_, enemyPosition);
+
+	enemies_.push_back(newEnemy);
+	}
+	*/
 	enemy_ = new Enemy();
 	//座標をマップチップ番号で指定
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);

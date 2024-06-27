@@ -321,16 +321,29 @@ void Player::wallCollision(const CollisionMapInfo& info)
 	}
 }
 
+//ワールド座標を取得
+Vector3 Player::GetWorldPosition()
+{
+	//ワールド座標を入れる変数
+	Vector3 worldPos{};
+	//ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
 //マップチップとプレイヤーの衝突判定
 void Player::CollisionMap(CollisionMapInfo& info)
 {
-	////上判定
+	//上判定
 	CollisionMapTop(info);
-	////下判定
+	//下判定
 	CollisionMapBottom(info);
-	////右判定
+	//右判定
 	CollisionMapRight(info);
-	////左判定
+	//左判定
 	CollisionMapLeft(info);
 }
 

@@ -28,7 +28,7 @@ void Enemy::Update()
 	//タイマーを加算	
 	walkTimer_ += 1.0f / 60.0f;
 	//回転アニメーション
-	float param = static_cast<float>(std::sin((2 * M_PI)));
+	float param = static_cast<float>(std::sin((2 * M_PI) * kWalkMotionTime) / walkTimer_);
 	float radian = (kWalkMotionAngleStart + lWalkMotionAngleEnd) * (param + 1.0f) / 2.0f;
 	worldTransform_.rotation_.x = std::sin(radian);
 	//移動

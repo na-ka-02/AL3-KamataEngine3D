@@ -390,6 +390,7 @@ void GameScene::Draw() {
 
 }
 
+#pragma region ブロック
 void GameScene::GenerateBlocks()
 {
 	//2-4
@@ -427,17 +428,33 @@ void GameScene::GenerateBlocks()
 				worldTransformBlockModels_[i][j] = worldTransform;
 				worldTransformBlockModels_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
-			/*if (j % 2 == 0)
-			{
-				worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
-			}
-			if (i % 2 == 0)
-			{
-				worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
-			}*/
 		}
 	}
 }
+#pragma endregion
+
+#pragma region 自キャラと敵キャラの当たり判定
+void GameScene::CheckAllCollisions()
+{
+	//判定対象1と2の座標
+	AABB aabb1{}, aabb2{};
+
+	//自キャラの座標
+	aabb1 = player_->GetAABB();
+
+	//自キャラと敵弾全てぼ当たり判定
+	for (Enemy* enemy : enemy_)
+	{
+		aabb2 = enemy->GetAABB();
+	}
+
+	//敵弾の座標
+
+	//AABB同士の判定
+}
+#pragma endregion
+
+
 
 
 

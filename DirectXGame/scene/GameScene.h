@@ -49,9 +49,15 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	//2-4
-	//表示ブロック
+	/// <summary>
+	///表示ブロック
+	/// </summary>
 	void GenerateBlocks();
+
+	/// <summary>
+	/// 全ての当たり判定を行う
+	/// </summary>
+	void CheckAllCollisions();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

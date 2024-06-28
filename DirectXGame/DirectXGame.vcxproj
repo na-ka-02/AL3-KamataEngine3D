@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="2d\ImGuiManager.cpp" />
     <ClCompile Include="3d\WorldTransform.cpp" />
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="CameraController.cpp" />

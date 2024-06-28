@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "ViewProjection.h"
 #include "mathMT.h"
+#include"AABB.h"
 
 class MapChipField;
 
@@ -102,7 +103,7 @@ public:
 	/// <summary>
 	/// AABB取得
 	/// </summary>
-	//AABB GetABB();
+	AABB GetAABB();
 
 private:
 	/// <summary>

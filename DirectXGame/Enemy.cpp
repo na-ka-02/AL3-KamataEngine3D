@@ -1,5 +1,6 @@
 ﻿#include "Enemy.h"
 #include <cassert>
+#include "Player.h"
 
 //初期化
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position)
@@ -43,3 +44,42 @@ void Enemy::Draw()
 	//3Dモデル描画
 	model_->Draw(worldTransform_, *viewProjection_);
 }
+
+Vector3 Enemy::GetWorldPosition()
+{
+	//ワールド座標を入れる変数
+	Vector3 worldPos{};
+	//ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
+AABB Enemy::GetAABB()
+{
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb{};
+
+	aabb.min = { worldPos.x - kWidth / 2.0f,worldPos.y - kHeight,worldPos.z - kWidth / 2.0f };
+	aabb.min = { worldPos.x + kWidth / 2.0f,worldPos.y + kHeight,worldPos.z + kWidth / 2.0f };
+
+	return aabb;
+}
+
+void Player::OnCollision(const Enemy* enemy)
+{
+	(void)enemy;
+	//ジャンプ初速(仮処理)
+	velocity_ += Vector3(kJumpAcceleration);
+}
+
+//衝突応答
+void Enemy::OnCollision(const Player* player)
+{
+	(void)player;
+}
+
+

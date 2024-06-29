@@ -4,6 +4,9 @@
 #include "ViewProjection.h"
 #define _USE_MATH_DEFINES
 #include "math.h"
+#include"AABB.h"
+
+class Player;
 
 class Enemy
 {
@@ -20,6 +23,18 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition();
+	/// <summary>
+	/// 衝突判定
+	/// </summary>
+	AABB GetAABB();
+	/// <summary>
+	/// 衝突応答
+	/// </summary>
+	void OnCollision(const Player* player);
 
 private:
 	//ワールドトランスフォーム
@@ -42,4 +57,7 @@ private:
 	static inline const float lWalkMotionAngleEnd = 45.0f;
 	//経過時間
 	float walkTimer_ = 0.0f;
+	//キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;//横
+	static inline const float kHeight = 0.8f;//縦
 };

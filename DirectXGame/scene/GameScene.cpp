@@ -236,6 +236,9 @@ void GameScene::Update() {
 		}
 	}
 
+	//全ての当たり判定を行う
+	CheckAllCollisions();
+
 	//スペースキーを押した瞬間
 	if (input_->TriggerKey(DIK_RETURN))
 	{
@@ -443,14 +446,27 @@ void GameScene::CheckAllCollisions()
 	aabb1 = player_->GetAABB();
 
 	//自キャラと敵弾全てぼ当たり判定
-	for (Enemy* enemy : enemy_)
-	{
-		aabb2 = enemy->GetAABB();
-	}
-
+	/*for (Enemy* enemy : enemy_)
+	{*/
 	//敵弾の座標
+	aabb2 = enemy_->GetAABB();
+	//}
+	//AABB同士の交差判定
+	if (isCollision(aabb1, aabb2))
+	{
+		player_->OnCollision(enemy_);
+		enemy_->OnCollision(player_);
+	}
+}
 
-	//AABB同士の判定
+
+bool GameScene::isCollision(AABB playerPos, AABB enemyPos)
+{
+	if(aabb(playerPos,enemyPos))
+	{
+	return true;
+	}
+	return false;
 }
 #pragma endregion
 

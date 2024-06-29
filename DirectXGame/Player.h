@@ -9,6 +9,7 @@
 #include "mathMT.h"
 #include"AABB.h"
 
+class Enemy;
 class MapChipField;
 
 //キャラの左右の向き
@@ -104,6 +105,8 @@ public:
 	/// AABB取得
 	/// </summary>
 	AABB GetAABB();
+
+	void OnCollision(const Enemy* enemy);
 
 private:
 	/// <summary>

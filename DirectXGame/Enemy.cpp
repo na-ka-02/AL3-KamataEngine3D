@@ -27,11 +27,11 @@ void Enemy::Update()
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 	//タイマーを加算	
-	walkTimer_ += 1.0f / 60.0f;
+	walkTimer_ += 5.0f / 60.0f;
 	//回転アニメーション
-	float param = static_cast<float>(std::sin((2 * M_PI) * kWalkMotionTime) / walkTimer_);
+	float param = std::sin(walkTimer_);
 	float radian = (kWalkMotionAngleStart + lWalkMotionAngleEnd) * (param + 1.0f) / 2.0f;
-	worldTransform_.rotation_.x = static_cast<float>(radian * M_PI / 360.0f);
+	worldTransform_.rotation_.z = static_cast<float>(radian * M_PI / 360.0f);
 	//移動
 	worldTransform_.translation_ += velocity_;
 	//行列計算

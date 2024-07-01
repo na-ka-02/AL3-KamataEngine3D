@@ -126,7 +126,7 @@ void Player::Update()
 			float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 
 			//自キャラの角度を設定する(線形補間)
-			worldTransform_.rotation_.y = Ease(turnFirstRotationY_, destinationRotationY, turnTimer_);
+			worldTransform_.rotation_.y = Ease(destinationRotationY, turnFirstRotationY_, turnTimer_);
 		}
 	}
 	//行列計算

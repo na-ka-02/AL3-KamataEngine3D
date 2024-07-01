@@ -59,10 +59,6 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAllCollisions();
 
-	// 当たり判定
-	bool isCollision(AABB playerPos, AABB enemyPos);
-
-
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

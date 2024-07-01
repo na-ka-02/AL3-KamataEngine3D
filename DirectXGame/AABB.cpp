@@ -1,6 +1,6 @@
 ﻿#include "AABB.h"
 
-bool aabb(const AABB& a, const AABB& b)
+inline bool isColision(const AABB& a, const AABB& b)
 {
 	if  (
 		(a.min.x <= b.max.x && a.max.x >= b.min.x) &&//x軸

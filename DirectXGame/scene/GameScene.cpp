@@ -452,22 +452,13 @@ void GameScene::CheckAllCollisions()
 	aabb2 = enemy_->GetAABB();
 	//}
 	//AABB同士の交差判定
-	if (isCollision(aabb1, aabb2))
+	if (isColision(aabb1, aabb2))
 	{
 		player_->OnCollision(enemy_);
 		enemy_->OnCollision(player_);
 	}
 }
 
-
-bool GameScene::isCollision(AABB playerPos, AABB enemyPos)
-{
-	if(aabb(playerPos,enemyPos))
-	{
-	return true;
-	}
-	return false;
-}
 #pragma endregion
 
 

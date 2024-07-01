@@ -8,4 +8,4 @@ struct AABB
 	Vector3 max;//最大値
 };
 
-bool aabb(const AABB&a, const AABB& b);
+inline bool isColision(const AABB&a, const AABB& b);

@@ -76,6 +76,7 @@ void Player::OnCollision(const Enemy* enemy)
 	velocity_ += Vector3(kJumpAcceleration);
 }
 
+
 //衝突応答
 void Enemy::OnCollision(const Player* player)
 {

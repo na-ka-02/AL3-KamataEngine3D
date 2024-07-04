@@ -66,10 +66,6 @@ public:
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// 移動処理関数
-	/// </summary>
-	void keyPush();
-	/// <summary>
 	/// ワールドトランスフォームを返す
 	/// </summary>
 	WorldTransform& GetWolrdTransform() { return worldTransform_; }

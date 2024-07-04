@@ -40,8 +40,76 @@ void Player::Update()
 	//地面についている時
 	if (onGround_)
 	{
-		//移動入力
-		keyPush();
+	
+	//移動入力
+	//左右移動操作
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
+		{
+			//左右加速
+			Vector3 acceleration = {};
+			//		//右入力
+			if (Input::GetInstance()->PushKey(DIK_RIGHT))
+			{
+				//左移動中の右入力
+				if (velocity_.x < 0.0f)
+				{
+					velocity_.x *= (1.0f - kAcceleration);
+				}
+				//右向き
+				if (lrDirection_ != LRDirection::kRight)
+				{
+					lrDirection_ = LRDirection::kRight;
+					//旋回開始時の角度を記録
+					turnFirstRotationY_ = worldTransform_.rotation_.y;
+					//旋回タイマーに時間を設定
+					turnTimer_ = 1.0f;
+				}
+				//加速度
+				acceleration.x += kAcceleration;
+			}
+			//左入力
+			else if (Input::GetInstance()->PushKey(DIK_LEFT))
+			{
+				//右移動中の左入力
+				if (velocity_.x > 0.0f)
+				{
+					velocity_.x *= (1.0f - kAttenuation);
+				}
+				//左向き
+				if (lrDirection_ != LRDirection::kLeft)
+				{
+					lrDirection_ = LRDirection::kLeft;
+					//旋回開始時の角度を記録
+					turnFirstRotationY_ = worldTransform_.rotation_.y;
+					//旋回タイマーに時間を設定
+					turnTimer_ = 1.0f;
+				}
+				//加速度
+				acceleration.x -= kAcceleration;
+			}
+
+			//加速 / 減速
+			velocity_ += acceleration;
+			//最大速度制限
+			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+		}
+		//速度減衰
+		else
+		{
+			///非入力時は移動減衰をかける
+			velocity_.x *= (1 - kAttenuation);
+			if (velocity_.x * velocity_.x < 0.001f)
+			{
+				velocity_.x = 0;
+			}
+		}
+
+		//ジャンプ処理
+		if (Input::GetInstance()->TriggerKey(DIK_UP))
+		{
+			//ジャンプ初速
+			velocity_ += Vector3(0, kJumpAcceleration, 0);
+		}
 	}
 	//空中
 	else
@@ -99,8 +167,6 @@ void Player::Update()
 	//マップチップ衝突チェック
 	CollisionMap(collisionMapInfo);
 	//
-	CollisionMapTop(collisionMapInfo);
-	//
 	groundCollision(collisionMapInfo);
 	//
 	wallCollision(collisionMapInfo);
@@ -119,7 +185,7 @@ void Player::Update()
 			//左右の自キャラ角度テーブル
 			float destinationRotationYTable[] =
 			{
-			std::numbers::pi_v < float> *5.0f / 2.0f,
+			std::numbers::pi_v <float>  / 2.0f,
 			std::numbers::pi_v<float>*3.0f / 2.0f
 			};
 			//状態に応じた角度を取得する
@@ -142,72 +208,6 @@ void Player::Draw()
 //キー入力
 void Player::keyPush()
 {
-	//左右移動操作
-	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
-	{
-		//左右加速
-		Vector3 acceleration = {};
-		//		//右入力
-		if (Input::GetInstance()->PushKey(DIK_RIGHT))
-		{
-			//左移動中の右入力
-			if (velocity_.x < 0.0f)
-			{
-				velocity_.x *= (1.0f - kAcceleration);
-			}
-			//右向き
-			if (lrDirection_ != LRDirection::kRight)
-			{
-				lrDirection_ = LRDirection::kRight;
-				//旋回開始時の角度を記録
-				turnFirstRotationY_ = worldTransform_.rotation_.y;
-				//旋回タイマーに時間を設定
-				turnTimer_ = 1.0f;
-			}
-			//加速度
-			acceleration.x += kAcceleration;
-		}
-		//左入力
-		else if (Input::GetInstance()->PushKey(DIK_LEFT))
-		{
-			//右移動中の左入力
-			if (velocity_.x > 0.0f)
-			{
-				velocity_.x *= (1.0f - kAttenuation);
-			}
-			//左向き
-			if (lrDirection_ != LRDirection::kLeft)
-			{
-				lrDirection_ = LRDirection::kLeft;
-				//旋回開始時の角度を記録
-				turnFirstRotationY_ = worldTransform_.rotation_.y;
-				//旋回タイマーに時間を設定
-				turnTimer_ = 1.0f;
-			}
-			//加速度
-			acceleration.x -= kAcceleration;
-		}
-
-		//加速 / 減速
-		velocity_ += acceleration;
-		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
-	}//速度減衰
-	else
-	{
-		///非入力時は移動減衰をかける
-		velocity_.x *= (1 - kAttenuation);
-		if (velocity_.x * velocity_.x < 0.001f)
-		{
-			velocity_.x = 0;
-		}
-	}
-
-	//ジャンプ処理
-	if (Input::GetInstance()->TriggerKey(DIK_UP))
-	{
-		//ジャンプ初速
-		velocity_ += Vector3(0, kJumpAcceleration, 0);
-	}
 }
 
 //マップチップの情報
@@ -313,9 +313,8 @@ void Player::groundCollision(const CollisionMapInfo& info)
 //壁に接触しているか
 void Player::wallCollision(const CollisionMapInfo& info)
 {
-	CollisionMapInfo collisionMapInfo;
 	//壁接触による減速
-	if (collisionMapInfo.hitWall)
+	if (info.hitWall)
 	{
 		velocity_.x *= (1.0f - kAttenuationWall);
 	}
@@ -586,4 +585,10 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
 	{ -kWidth / 2.0f,+kHeight / 2.0f,0 }
 	};
 	return center + offsetTable[static_cast<uint32_t>(corner)];
+}
+
+void Player::OnCollision(const Enemy* enemy)
+{
+	//ジャンプ初速(仮処理)
+	velocity_.y += (kJumpAcceleration);
 }

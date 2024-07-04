@@ -93,9 +93,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="DeathParticles.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

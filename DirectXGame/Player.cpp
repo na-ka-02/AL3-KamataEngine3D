@@ -171,7 +171,7 @@ void Player::Update()
 	//
 	celingCollision(collisionMapInfo);
 	//
-	groundCollision(collisionMapInfo);
+	//groundCollision(collisionMapInfo);
 	//
 	wallCollision(collisionMapInfo);
 

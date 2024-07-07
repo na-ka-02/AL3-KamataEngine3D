@@ -17,6 +17,8 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	//自キャラ
 	delete player_;
+	//自キャラのパーティクル
+	delete deathParticles_;
 	//敵キャラ
 	//for(std::vector<Enemy*>&enemy)
 
@@ -53,14 +55,12 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//ブロックモデルの読み込み(2-1)
-	//textureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
 	sprite_ = Sprite::Create(textureHandle_, { 1000,100 });
 
-	//3Dモデルの生成(1-3)
+	//自キャラの3Dモデルの生成(1-3)
 	model_ = Model::CreateFromOBJ("player", true);
 	//自キャラの生成
 	player_ = new Player();
@@ -69,7 +69,13 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_, &viewProjection_, playerPosition);
 
-	//3Dモデルの生成(1-3)
+	//パーティクルの3Dモデルの生成
+	model_ = Model::CreateFromOBJ("particle", true);
+	//パーティクルの生成(2-11)
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(model_, &viewProjection_, playerPosition);
+
+	//敵の3Dモデルの生成(今はプレイヤーのモデル)
 	model_ = Model::CreateFromOBJ("player", true);
 	//敵キャラの生成
 	/*for (int32_t i = 0; i < 4;++i)
@@ -109,12 +115,9 @@ void GameScene::Initialize() {
 	//プレイヤーがいるマップチップの情報
 	player_->SetMapChipField(mapChipField_);
 
-
-
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(5000);
-
 
 	//カメラコントローラの初期化(2-5)
 	cameraController_ = new CameraController;
@@ -131,49 +134,6 @@ void GameScene::Initialize() {
 	blockModel_ = Model::Create();
 	//ブロックモデル(2-2)
 	block_ = Model::Create();
-
-#pragma region 2-1
-	/*
-	//2-1
-	//ブロック
-	//要素数
-	//縦
-	const uint32_t kNumBlockVirtical = 10;
-	//横
-	const uint32_t kNumBlockHorizontal = 20;
-	//ブロック1個分の横幅
-	//縦
-	const float kBlockHeight = 2.0f;
-	//横
-	const float kBlockWidth = 2.0f;
-	//要素数を変更する
-	//列数を設定(縦方向のブロック数)
-	worldTransformBlockModels_.resize(kNumBlockVirtical);
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
-	{
-		//1列の要素数を設定(横方向のブロック数)
-		worldTransformBlockModels_[i].resize(kNumBlockHorizontal);
-	}
-
-	//キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i)
-	{
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j)
-		{
-			worldTransformBlockModels_[i][j] = new WorldTransform();
-			worldTransformBlockModels_[i][j]->Initialize();
-
-			if (j % 2 == 0)
-			{
-				worldTransformBlockModels_[i][j]->translation_.x = kBlockWidth * j;
-			}
-			if (i % 2 == 0)
-			{
-				worldTransformBlockModels_[i][j]->translation_.y = kBlockHeight * i;
-			}
-		}
-	}*/
-#pragma endregion
 
 #pragma endregion
 
@@ -211,6 +171,11 @@ void GameScene::Update() {
 
 	//自キャラの更新
 	player_->Update();
+	//パーティクルの更新
+	if (deathParticles_)
+	{
+		deathParticles_->Update();
+	}
 	//敵キャラの更新
 	enemy_->Update();
 	//天球の更新
@@ -460,8 +425,3 @@ void GameScene::CheckAllCollisions()
 }
 
 #pragma endregion
-
-
-
-
-

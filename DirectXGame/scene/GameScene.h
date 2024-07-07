@@ -14,6 +14,7 @@
 #include"MapChipField.h"
 #include"CameraController.h"
 #include"Enemy.h"
+#include"DeathParticles.h"
 #include<iostream>
 #include<vector>
 #include<string>
@@ -104,7 +105,6 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-
 	//ブロック(2-1)
 	Model* blockModel_;
 	//ブロック(2-2)
@@ -121,4 +121,7 @@ private: // メンバ変数
 
 	//カメら移動範囲
 	Rect movableArea_ = { 13,185,7,100 };
+
+	//パーティクル
+	DeathParticles* deathParticles_ = nullptr;
 };

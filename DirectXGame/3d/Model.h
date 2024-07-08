@@ -3,6 +3,7 @@
 #include "LightGroup.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "ObjectColor.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -51,6 +52,7 @@ public:
 	/// getter
 	/// </summary>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
+	ObjectColor* GetObjectColor() const { return defaultObjectColor_.get(); }
 
 private:
 	ModelCommon() = default;
@@ -76,6 +78,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
 	// デフォルトライト
 	std::unique_ptr<LightGroup> defaultLightGroup_;
+	// デフォルトオブジェクトα
+	std::unique_ptr<ObjectColor> defaultObjectColor_;
 };
 
 /// <summary>
@@ -92,6 +96,7 @@ public: // 列挙子
 		kMaterial,       // マテリアル
 		kTexture,        // テクスチャ
 		kLight,          // ライト
+		kObjectColor,    // オブジェクトアルファ
 	};
 
 private:
@@ -150,7 +155,10 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	/// <param name="objectColor">オブジェクトカラー</param>
+	void Draw(
+	    const WorldTransform& worldTransform, const ViewProjection& viewProjection,
+	    const ObjectColor* objectColor = nullptr);
 
 	/// <summary>
 	/// 描画（テクスチャ差し替え）
@@ -158,9 +166,10 @@ public: // メンバ関数
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	/// <param name="textureHadle">テクスチャハンドル</param>
+	/// <param name="objectColor">オブジェクトカラー</param>
 	void Draw(
 	    const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-	    uint32_t textureHadle);
+	    uint32_t textureHadle, const ObjectColor* objectColor = nullptr);
 
 	/// <summary>
 	/// メッシュコンテナを取得

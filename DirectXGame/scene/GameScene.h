@@ -74,6 +74,11 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// フェーズ
+	/// </summary>
+	void ChangePhase();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -138,4 +143,9 @@ private: // メンバ変数
 
 	//パーティクル
 	DeathParticles* deathParticles_ = nullptr;
+
+	//ですフラグ
+	bool isDead_ = false;
+	//デスフラグのgetter
+	bool IsDead()const { return isDead_; }
 };

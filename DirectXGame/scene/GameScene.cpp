@@ -165,9 +165,12 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	//ゲームフェーズ
-	switch(phase_)
+	switch (phase_)
 	{
-	
+		case Phase::kPlay:
+			break;
+		case Phase::kDeath:
+			break;
 	}
 
 	//スプライトの今の座標を取得

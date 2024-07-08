@@ -55,6 +55,9 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//ゲームプレイフェーズから開始
+	phase_ = Phase::kPlay;
+
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
 	//スプライトの生成
@@ -160,6 +163,12 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	//ゲームフェーズ
+	switch(phase_)
+	{
+	
+	}
 
 	//スプライトの今の座標を取得
 	Vector2 position = sprite_->GetPosition();

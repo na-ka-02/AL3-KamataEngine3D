@@ -19,6 +19,20 @@
 #include<vector>
 #include<string>
 
+
+
+/// <summary>
+/// ゲームのフェーズ
+/// </summary>
+enum class Phase
+{
+	kPlay,///ゲームプレイ
+	kDeath,///デス演出
+};
+
+//ゲームの現在フェーズ(変数)
+Phase  phase_;
+
 /// <summary>
 /// ゲームシーン
 /// </summary>

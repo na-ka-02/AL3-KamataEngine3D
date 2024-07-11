@@ -19,6 +19,12 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+	/// <summary>
+	/// デスフラグのgetter
+	/// </summary>
+	bool IsFinished()const { return finished_; }
 
 private:
+	//終了フラグ
+	bool finished_ = false;
 };

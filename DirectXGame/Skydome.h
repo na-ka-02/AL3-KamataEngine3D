@@ -39,7 +39,7 @@ private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
-	Model* model_ = nullptr;
+	Model* skydomeModel_ = nullptr;
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
 };

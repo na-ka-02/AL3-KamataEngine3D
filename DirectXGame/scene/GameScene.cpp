@@ -42,7 +42,7 @@ GameScene::~GameScene() {
 	//ブロックの中身も全部消す。clearは全部消す。
 	worldTransformBlockModels_.clear();
 	//天球
-	delete modelSkydome_;
+	delete skydomeModel_;
 	//マップチップフィールドの解放
 	delete mapChipField_;
 	//追従カメラ
@@ -64,22 +64,22 @@ void GameScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, { 1000,100 });
 
 	//自キャラの3Dモデルの生成(1-3)
-	model_ = Model::CreateFromOBJ("player", true);
+	playerModel_ = Model::CreateFromOBJ("player", true);
 	//自キャラの生成
 	player_ = new Player();
 	//座標をマップチップ番号で指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	//自キャラの初期化
-	player_->Initialize(model_, &viewProjection_, playerPosition);
+	player_->Initialize(playerModel_, &viewProjection_, playerPosition);
 
 	//パーティクルの3Dモデルの生成
-	model_ = Model::CreateFromOBJ("particle", true);
+	deathParticleModel_ = Model::CreateFromOBJ("particle", true);
 	//パーティクルの生成(2-11)
 	deathParticles_ = new DeathParticles;
 	deathParticles_->Initialize(model_, &viewProjection_, playerPosition);
 
 	//敵の3Dモデルの生成(今はプレイヤーのモデル)
-	model_ = Model::CreateFromOBJ("player", true);
+	enemyModel_ = Model::CreateFromOBJ("player", true);
 	//敵キャラの生成
 	/*for (int32_t i = 0; i < 4;++i)
 	{
@@ -94,14 +94,14 @@ void GameScene::Initialize() {
 	//座標をマップチップ番号で指定
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
 	//敵キャラの初期化
-	enemy_->Initialize(model_, &viewProjection_, enemyPosition);
+	enemy_->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
 	//3Dモデルの生成(2-3の天球)
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydomeModel_ = Model::CreateFromOBJ("skydome", true);
 	//天球の生成(2-3)
 	skydome_ = new Skydome();
 	//天球の初期化(2-3)
-	skydome_->Initialize(modelSkydome_, &viewProjection_);
+	skydome_->Initialize(skydomeModel_, &viewProjection_);
 
 	//マップチップの呼び出し(2-4)
 	mapChipField_ = new MapChipField;
@@ -114,7 +114,7 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player;
 	//自キャラの初期化
-	player_->Initialize(model_, &viewProjection_, playerPosition);
+	player_->Initialize(playerModel_, &viewProjection_, playerPosition);
 	//プレイヤーがいるマップチップの情報
 	player_->SetMapChipField(mapChipField_);
 
@@ -163,6 +163,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	ChangePhase();
 
 	//ゲームフェーズ
 	switch (phase_)
@@ -435,6 +437,27 @@ void GameScene::CheckAllCollisions()
 	{
 		player_->OnCollision(enemy_);
 		enemy_->OnCollision(player_);
+	}
+}
+
+void GameScene::ChangePhase()
+{
+	switch (phase_)
+	{
+		//ゲームプレイフェーズ
+		case Phase::kPlay:
+			if (isDead_ == true)
+			{
+				//死亡演出フェーズに切り替え
+				phase_ = Phase::kDeath;
+			}
+			//自キャラの座標を取得
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+			deathParticles_->Initialize(deathParticleModel_, &viewProjection_, deathParticlesPosition);
+			break;
+		//デス演出フェーズの処理
+		//case Phase::kDeath:
+		//	break;
 	}
 }
 

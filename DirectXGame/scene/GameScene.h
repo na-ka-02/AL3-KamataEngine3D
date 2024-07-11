@@ -19,8 +19,6 @@
 #include<vector>
 #include<string>
 
-
-
 /// <summary>
 /// ゲームのフェーズ
 /// </summary>
@@ -30,8 +28,7 @@ enum class Phase
 	kDeath,///デス演出
 };
 
-//ゲームの現在フェーズ(変数)
-Phase  phase_;
+
 
 /// <summary>
 /// ゲームシーン
@@ -86,15 +83,21 @@ private: // メンバ変数
 
 	//自キャラ
 	Player* player_ = nullptr;
+	Model* playerModel_ = nullptr;
 	//敵キャラ
 	//std::list<Enemy*>enemies_;
 	Enemy* enemy_ = nullptr;
+	Model* enemyModel_ = nullptr;
 	//天球
 	Skydome* skydome_ = nullptr;
+	Model* skydomeModel_ = nullptr;
 	//マップチップフィールド
 	MapChipField* mapChipField_;
 	//追従カメラ
 	CameraController* cameraController_ = nullptr;
+	//パーティクル
+	DeathParticles* deathParticles_ = nullptr;
+	Model* deathParticleModel_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -134,18 +137,12 @@ private: // メンバ変数
 	//std::vectorを重ねると二次元配列になる
 	std::vector<std::vector<WorldTransform*>>worldTransformBlockModels_;
 
-	//2-3
-	//天球のモデル
-	Model* modelSkydome_ = nullptr;
-
 	//カメら移動範囲
 	Rect movableArea_ = { 13,185,7,100 };
 
-	//パーティクル
-	DeathParticles* deathParticles_ = nullptr;
-
 	//ですフラグ
 	bool isDead_ = false;
-	//デスフラグのgetter
-	bool IsDead()const { return isDead_; }
+	//ゲームの現在フェーズ(変数)
+	Phase  phase_;
+
 };

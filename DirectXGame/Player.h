@@ -120,7 +120,7 @@ private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	//3Dモデル
-	Model* model_ = nullptr;
+	Model* playerModel_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//ビュープロジェクション

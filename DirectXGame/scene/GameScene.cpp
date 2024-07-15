@@ -169,8 +169,91 @@ void GameScene::Update() {
 	//ゲームフェーズ
 	switch (phase_)
 	{
+		//ゲームシーン
 		case Phase::kPlay:
+			//自キャラの更新
+			player_->Update();
+			//敵キャラの更新
+			enemy_->Update();
+			//天球の更新
+			skydome_->Update();
+			//ブロックの更新
+			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
+			{
+				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+				{
+					if (!worldTransformBlock)
+					{
+						continue;
+					}
+					worldTransformBlock->matWorld_ =
+						MakeAffineMatrix
+						(
+							worldTransformBlock->scale_,
+							worldTransformBlock->rotation_,
+							worldTransformBlock->translation_
+						);
+
+					worldTransformBlock->TransferMatrix();
+				}
+			}
+			//全ての当たり判定を行う
+			CheckAllCollisions();
+
+			//追従カメラの更新
+			cameraController_->Update();
+			//デバッグカメラの更新
+			debugCamera_->Update();
+			//デバッグカメラ有効無効切り替え(ifdefはDebugでしか機能しない)
+#ifdef _DEBUG
+			if (input_->TriggerKey(DIK_SPACE))
+			{
+				isDebugCameraActive_ ^= true;
+			}
+#endif
+
+			//カメラの処理
+			if (isDebugCameraActive_)
+			{
+				//デバッグの更新
+				debugCamera_->Update();
+				//デバッグカメラのビュー行列
+				viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+				//デバッグカメラのプロジェクション行列
+				viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+				//ビュープロジェクション行列の更新と転送
+				viewProjection_.TransferMatrix();
+			}
+			else
+			{
+				//ビューポートの行列更新
+				viewProjection_.UpdateMatrix();
+			}
+
+			//デバッグカメラと同じ感じの処理をする
+			//追従カメラのビュー行列
+			viewProjection_.matView = cameraController_->GetViewProjection().matView;
+			//追従カメラのプロジェクション行列
+			viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+			//ビュープロジェクション行列の更新と転送
+			viewProjection_.TransferMatrix();
+
+			//デバックテキストの表示開始
+			ImGui::Begin("Debug1");
+			//float3入力ボックス
+			ImGui::InputFloat3("InputFloat3", inputFloat3);
+			//float3スライダー
+			ImGui::SliderFloat3("SliderFloat3", inputFloat3, 0.0f, 1.0f);
+			//変数三つ表示
+			ImGui::Text("Kamata Tarou %d.%d.%d", 2050, 12, 31);
+			//デバックテキスト表示終了
+			ImGui::End();
+
+			//デモウィンドウの表示を有効化
+			ImGui::ShowDemoWindow();
+
 			break;
+			//倒された
 		case Phase::kDeath:
 			break;
 	}
@@ -183,40 +266,11 @@ void GameScene::Update() {
 	//移動した座標をスプライトに反映
 	/*sprite_->SetPosition(position);*/
 
-	//自キャラの更新
-	player_->Update();
 	//パーティクルの更新
 	if (deathParticles_)
 	{
 		deathParticles_->Update();
 	}
-	//敵キャラの更新
-	enemy_->Update();
-	//天球の更新
-	skydome_->Update();
-	//ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
-	{
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-		{
-			if (!worldTransformBlock)
-			{
-				continue;
-			}
-			worldTransformBlock->matWorld_ =
-				MakeAffineMatrix
-				(
-					worldTransformBlock->scale_,
-					worldTransformBlock->rotation_,
-					worldTransformBlock->translation_
-				);
-
-			worldTransformBlock->TransferMatrix();
-		}
-	}
-
-	//全ての当たり判定を行う
-	CheckAllCollisions();
 
 	//スペースキーを押した瞬間
 	if (input_->TriggerKey(DIK_RETURN))
@@ -231,69 +285,12 @@ void GameScene::Update() {
 			voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 		}
 	}
-
-
-	//デバッグカメラの更新
-	debugCamera_->Update();
-
-	//デバッグカメラ有効無効切り替え(ifdefはDebugでしか機能しない)
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE))
-	{
-		isDebugCameraActive_ ^= true;
-	}
-#endif
-
-	//カメラの処理
-	if (isDebugCameraActive_)
-	{
-		//デバッグの更新
-		debugCamera_->Update();
-		//デバッグカメラのビュー行列
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		//デバッグカメラのプロジェクション行列
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の更新と転送
-		viewProjection_.TransferMatrix();
-	}
-	else
-	{
-		//ビューポートの行列更新
-		viewProjection_.UpdateMatrix();
-	}
-
-	//追従カメラの更新
-	cameraController_->Update();
-	//デバッグカメラと同じ感じの処理をする
-	//追従カメラのビュー行列
-	viewProjection_.matView = cameraController_->GetViewProjection().matView;
-	//追従カメラのプロジェクション行列
-	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
-	//ビュープロジェクション行列の更新と転送
-	viewProjection_.TransferMatrix();
-
-
-	//デバックテキストの表示開始
-	ImGui::Begin("Debug1");
-	//float3入力ボックス
-	ImGui::InputFloat3("InputFloat3", inputFloat3);
-	//float3スライダー
-	ImGui::SliderFloat3("SliderFloat3", inputFloat3, 0.0f, 1.0f);
-	//変数三つ表示
-	ImGui::Text("Kamata Tarou %d.%d.%d", 2050, 12, 31);
-	//デバックテキスト表示終了
-	ImGui::End();
-
-	//デモウィンドウの表示を有効化
-	ImGui::ShowDemoWindow();
-
 }
 
 void GameScene::Draw() {
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-
 
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
@@ -317,29 +314,54 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	//3Dモデル描画
-//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
-	//ブロック
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
+	switch (phase_)
 	{
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-		{
-			if (!worldTransformBlock)
+		//ゲームシーン
+		case Phase::kPlay:
+			//ブロック
+			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 			{
-				continue;
+				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+				{
+					if (!worldTransformBlock)
+					{
+						continue;
+					}
+					blockModel_->Draw(*worldTransformBlock, viewProjection_);
+				}
 			}
-			blockModel_->Draw(*worldTransformBlock, viewProjection_);
-		}
-	}
+			//自キャラの描画
+			player_->Draw();
+			//敵キャラの描画
+			enemy_->Draw();
+			//天球の描画
+			skydome_->Draw();
+			break;
 
-	//自キャラの描画
-	player_->Draw();
-	//敵キャラの描画
-	enemy_->Draw();
-	//天球の描画
-	skydome_->Draw();
-	//パーティクルの描画
-	deathParticles_->Draw();
+			//デスシーン
+		case Phase::kDeath:
+			//ブロック
+			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
+			{
+				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+				{
+					if (!worldTransformBlock)
+					{
+						continue;
+					}
+					blockModel_->Draw(*worldTransformBlock, viewProjection_);
+				}
+			}
+			//パーティクルの描画
+			deathParticles_->Draw();
+			//敵キャラの描画
+			enemy_->Draw();
+			//天球の描画
+			skydome_->Draw();
+			break;
+	}
+	//3Dモデル描画
+	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	//デバッグカメラ←3Dモデル直下に書く
 	//blockModel_->Draw(worldTransform_, debugCamera_->GetViewProjection(), blockTextureHandle_);
@@ -358,14 +380,12 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
 
-
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
 	//絵を描画
 	//sprite_->Draw();
-
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -450,14 +470,18 @@ void GameScene::ChangePhase()
 			{
 				//死亡演出フェーズに切り替え
 				phase_ = Phase::kDeath;
+				//自キャラの座標を取得
+				const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+				deathParticles_->Initialize(deathParticleModel_, &viewProjection_, deathParticlesPosition);
 			}
-			//自キャラの座標を取得
-			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
-			deathParticles_->Initialize(deathParticleModel_, &viewProjection_, deathParticlesPosition);
 			break;
-		//デス演出フェーズの処理
-		//case Phase::kDeath:
-		//	break;
+			//デス演出フェーズの処理
+		case Phase::kDeath:
+			if (deathParticles_ && deathParticles_->IsFinished())
+			{
+				finished_ = true;
+			}
+			break;
 	}
 }
 

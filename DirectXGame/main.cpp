@@ -27,6 +27,8 @@ Scene scene = Scene::kUnknown;
 void ChangeScene();
 //シーンの更新
 void UpdateScene();
+//描画
+void DrawScene();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -79,10 +81,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//タイトルシーンの初期化・更新・描画
 	scene = Scene::kTitle;
-	/*titleScene = new TitleScene;
-	titleScene->Initialize();*/
-	titleScene->Update();
-	titleScene->Draw();
+	titleScene = new TitleScene;
+	titleScene->Initialize();
+	//titleScene->Update();
+	//シーン切り替え
+	ChangeScene();
+	//現在シーンの描画
+	UpdateScene();
+	//titleScene->Draw();
+	//現在シーンの描画
+	DrawScene();
 
 	// ゲームシーンの初期化
 	gameScene = new GameScene();
@@ -141,32 +149,66 @@ void ChangeScene()
 {
 	switch (scene)
 	{
+		//タイトルシーン
 		case Scene::kTitle:
 			if (titleScene->IsFinished())
 			{
-				//
+				//シーン変更
 				scene = Scene::kGame;
+				//旧シーンの解放
 				delete titleScene;
 				titleScene = nullptr;
-				//
+				//新シーンの生成と初期化
 				gameScene = new GameScene;
 				gameScene->Initialize();
 			}
 			break;
+			//ゲームシーン
 		case Scene::kGame:
+			if (gameScene->IsFinished())
+			{
+				//シーン変更
+				scene = Scene::kTitle;
+				//旧シーンの解放
+				delete gameScene;
+				gameScene = nullptr;
+				//新シーンの生成と初期化
+				titleScene = new TitleScene;
+				titleScene->Initialize();
+			}
 			break;
 	}
 }
 
+//更新処理
 void UpdateScene()
 {
 	switch (scene)
 	{
+		//タイトルシーン
 		case Scene::kTitle:
 			titleScene->Update();
 			break;
+
+			//ゲームシーン
 		case Scene::kGame:
 			gameScene->Update();
+			break;
+	}
+}
+
+//描画
+void DrawScene()
+{
+	switch (scene)
+	{
+		//タイトルシーン
+		case Scene::kTitle:
+			titleScene->Draw();
+			break;
+			//ゲームシーン
+		case Scene::kGame:
+			gameScene->Draw();
 			break;
 	}
 }

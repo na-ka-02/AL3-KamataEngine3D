@@ -30,8 +30,9 @@ public:
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// 
+	/// デスパーティクルのgetter
 	/// </summary>
+	bool IsFinished() const { return isFinished_; }
 private:
 	Model* model_;
 	ViewProjection* viewProjection_;

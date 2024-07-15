@@ -77,7 +77,7 @@ public: // メンバ関数
 	void ChangePhase();
 
 	/// <summary>
-	/// getter
+	/// デスフラグのgetter
 	/// </summary>
 	bool IsFinished()const { return finished_; }
 
@@ -150,6 +150,6 @@ private: // メンバ変数
 	//ゲームの現在フェーズ(変数)
 	Phase  phase_;
 
-	//
+	//終了フラグ
 	bool finished_ = false;
 };

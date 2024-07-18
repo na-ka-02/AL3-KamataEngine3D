@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// デスパーティクルのgetter
 	/// </summary>
-	bool IsFinished() const { return isFinished_; }
+	bool IsFinished()const { return isFinished_; }
 private:
 	Model* model_;
 	ViewProjection* viewProjection_;

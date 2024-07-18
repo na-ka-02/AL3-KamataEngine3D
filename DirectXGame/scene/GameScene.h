@@ -20,17 +20,6 @@
 #include<string>
 
 /// <summary>
-/// ゲームのフェーズ
-/// </summary>
-enum class Phase
-{
-	kPlay,///ゲームプレイ
-	kDeath,///デス演出
-};
-
-
-
-/// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
@@ -86,6 +75,15 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	/// <summary>
+	/// ゲームのフェーズ
+	/// </summary>
+	enum class Phase
+	{
+		kPlay,///ゲームプレイ
+		kDeath,///デス演出
+	};
+
 	//自キャラ
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
@@ -103,7 +101,6 @@ private: // メンバ変数
 	//パーティクル
 	DeathParticles* deathParticles_ = nullptr;
 	Model* deathParticleModel_ = nullptr;
-
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	//サウンドデータハンドル

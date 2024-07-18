@@ -24,7 +24,7 @@ void TitleScene::Initialize()
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	viewProjection_.Initialize();
+
 	//タイトルバーの初期化
 	titleText = new TitleText;
 	titleTextModel_ = Model::CreateFromOBJ("Title", true);

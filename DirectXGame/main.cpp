@@ -8,9 +8,6 @@
 #include "WinApp.h"
 #include"TitleScene.h"
 
-TitleScene* titleScene = nullptr;
-GameScene* gameScene = nullptr;
-
 //シーン(型)
 enum class Scene
 {
@@ -22,6 +19,9 @@ enum class Scene
 
 //現在シーン(型)
 Scene scene = Scene::kUnknown;
+
+TitleScene* titleScene = nullptr;
+GameScene* gameScene = nullptr;
 
 //シーンの切り替え
 void ChangeScene();
@@ -83,14 +83,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scene = Scene::kTitle;
 	titleScene = new TitleScene;
 	titleScene->Initialize();
-	//titleScene->Update();
-	//シーン切り替え
-	ChangeScene();
-	//現在シーンの描画
-	UpdateScene();
-	//titleScene->Draw();
-	//現在シーンの描画
-	DrawScene();
 
 	// ゲームシーンの初期化
 	gameScene = new GameScene();
@@ -107,6 +99,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
+		//シーン切り替え
+		ChangeScene();
+		//現在シーンの更新
+		UpdateScene();
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
 		// 軸表示の更新
@@ -116,8 +112,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 描画開始
 		dxCommon->PreDraw();
-		// ゲームシーンの描画
-		gameScene->Draw();
+		//現在シーンの描画
+		DrawScene();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット

@@ -6,9 +6,12 @@
 #include"mathMT.h"
 #include <cassert>
 
-GameScene::GameScene() {}
+GameScene::GameScene()
+{
+}
 
-GameScene::~GameScene() {
+GameScene::~GameScene()
+{
 	//絵
 	delete sprite_;
 	//3Dモデル
@@ -16,12 +19,15 @@ GameScene::~GameScene() {
 	//デバッグカメラ
 	delete debugCamera_;
 	//自キャラ
-	delete player_;
+	if (player_)
+	{
+		delete player_;
+		delete playerModel_;
+	}
 	//自キャラのパーティクル
 	delete deathParticles_;
 	//敵キャラ
 	//for(std::vector<Enemy*>&enemy)
-
 	delete enemy_;
 	//天球
 	delete skydome_;
@@ -49,7 +55,8 @@ GameScene::~GameScene() {
 	delete cameraController_;
 }
 
-void GameScene::Initialize() {
+void GameScene::Initialize()
+{
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -57,6 +64,7 @@ void GameScene::Initialize() {
 
 	//ゲームプレイフェーズから開始
 	phase_ = Phase::kPlay;
+	finished_ = false;
 
 	//ブロックモデルの読み込み(2-2)
 	blockTextureHandle_ = TextureManager::Load("./Resources./cube./cube.jpg");
@@ -162,7 +170,8 @@ void GameScene::Initialize() {
 
 }
 
-void GameScene::Update() {
+void GameScene::Update()
+{
 
 	ChangePhase();
 
@@ -253,8 +262,43 @@ void GameScene::Update() {
 			ImGui::ShowDemoWindow();
 
 			break;
-			//倒された
+
+
+/////////倒された
 		case Phase::kDeath:
+			//敵キャラの更新
+			enemy_->Update();
+			//天球の更新
+			skydome_->Update();
+			//パーティクルの更新
+			if (deathParticles_)
+			{
+				deathParticles_->Update();
+			}
+			//ブロックの更新
+			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
+			{
+				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+				{
+					if (!worldTransformBlock)
+					{
+						continue;
+					}
+					worldTransformBlock->matWorld_ =
+						MakeAffineMatrix
+						(
+							worldTransformBlock->scale_,
+							worldTransformBlock->rotation_,
+							worldTransformBlock->translation_
+						);
+
+					worldTransformBlock->TransferMatrix();
+				}
+			}
+			if (deathParticles_ && deathParticles_->IsFinished())
+			{
+				finished_ = true;
+			}
 			break;
 	}
 
@@ -266,25 +310,21 @@ void GameScene::Update() {
 	//移動した座標をスプライトに反映
 	/*sprite_->SetPosition(position);*/
 
-	//パーティクルの更新
-	if (deathParticles_)
-	{
-		deathParticles_->Update();
-	}
+
 
 	//スペースキーを押した瞬間
-	if (input_->TriggerKey(DIK_RETURN))
-	{
-		//音声停止
-		if (audio_->IsPlaying(voiceHandle_))
-		{
-			audio_->StopWave(voiceHandle_);
-		}
-		else
-		{
-			voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
-		}
-	}
+	//if (input_->TriggerKey(DIK_RETURN))
+	//{
+	//	//音声停止
+	//	if (audio_->IsPlaying(voiceHandle_))
+	//	{
+	//		audio_->StopWave(voiceHandle_);
+	//	}
+	//	else
+	//	{
+	//		voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+	//	}
+	//}
 }
 
 void GameScene::Draw() {
@@ -314,51 +354,31 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	switch (phase_)
+	//ブロック
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
 	{
-		//ゲームシーン
-		case Phase::kPlay:
-			//ブロック
-			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
+		{
+			if (!worldTransformBlock)
 			{
-				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-				{
-					if (!worldTransformBlock)
-					{
-						continue;
-					}
-					blockModel_->Draw(*worldTransformBlock, viewProjection_);
-				}
+				continue;
 			}
-			//自キャラの描画
-			player_->Draw();
-			//敵キャラの描画
-			enemy_->Draw();
-			//天球の描画
-			skydome_->Draw();
-			break;
-
-			//デスシーン
-		case Phase::kDeath:
-			//ブロック
-			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlockModels_)
-			{
-				for (WorldTransform* worldTransformBlock : worldTransformBlockLine)
-				{
-					if (!worldTransformBlock)
-					{
-						continue;
-					}
-					blockModel_->Draw(*worldTransformBlock, viewProjection_);
-				}
-			}
-			//パーティクルの描画
-			deathParticles_->Draw();
-			//敵キャラの描画
-			enemy_->Draw();
-			//天球の描画
-			skydome_->Draw();
-			break;
+			blockModel_->Draw(*worldTransformBlock, viewProjection_);
+		}
+	}
+	//敵キャラの描画
+	enemy_->Draw();
+	//天球の描画
+	skydome_->Draw();
+	//自キャラの描画
+	if (player_)
+	{
+		player_->Draw();
+	}
+	//パーティクルの描画
+	if (deathParticles_)
+	{
+		deathParticles_->Draw();
 	}
 	//3Dモデル描画
 	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
@@ -472,7 +492,19 @@ void GameScene::ChangePhase()
 				phase_ = Phase::kDeath;
 				//自キャラの座標を取得
 				const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+
+				//死んだときのパーティクル
+				deathParticles_ = new DeathParticles;
 				deathParticles_->Initialize(deathParticleModel_, &viewProjection_, deathParticlesPosition);
+
+				//自キャラ削除
+				if (player_)
+				{
+					delete player_;
+					player_ = nullptr;
+					delete playerModel_;
+					playerModel_ = nullptr;
+				}
 			}
 			break;
 			//デス演出フェーズの処理

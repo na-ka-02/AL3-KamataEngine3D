@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 	deathParticleModel_ = Model::CreateFromOBJ("particle", true);
 	//パーティクルの生成(2-11)
 	deathParticles_ = new DeathParticles;
-	deathParticles_->Initialize(model_, &viewProjection_, playerPosition);
+	deathParticles_->Initialize(deathParticleModel_, &viewProjection_, playerPosition);
 
 	//敵の3Dモデルの生成(今はプレイヤーのモデル)
 	enemyModel_ = Model::CreateFromOBJ("player", true);

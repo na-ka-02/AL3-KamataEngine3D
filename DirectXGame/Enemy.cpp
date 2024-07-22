@@ -33,7 +33,7 @@ void Enemy::Update()
 	float radian = (kWalkMotionAngleStart + lWalkMotionAngleEnd) * (param + 1.0f) / 2.0f;
 	worldTransform_.rotation_.z = static_cast<float>(radian * M_PI / 360.0f);
 	//移動
-//	worldTransform_.translation_ += velocity_;
+	worldTransform_.translation_ += velocity_;
 	//行列計算
 	worldTransform_.UpdateMatrix();
 }

@@ -1,69 +1,92 @@
-#include "DeathParticles.h"
+ï»¿#include "DeathParticles.h"
 #include "Player.h"
 #include <cassert>
+#include "DeathParticles.h"
 
+//åˆæœŸåŒ–
 void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position)
 {
-	//NuLLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	//NuLLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
 	for (auto& worldTransform : worldTransforms_)
 	{
 		worldTransform.Initialize();
 		worldTransform.translation_ = position;
 	}
-	//ƒƒ“ƒo•Ï”‚É‹L‰¯
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®åˆæœŸåŒ–
+	objectColor_.Initialize();
+	color_ = { 1,1,1,1 };
+	//ãƒ¡ãƒ³ãƒå¤‰æ•°ã«è¨˜æ†¶
 	model_ = model;
 	viewProjection_ = viewProjection;
 }
 
+//æ›´æ–°
 void DeathParticles::Update()
 {
-	//s—ñ‚ğ’è”ƒoƒbƒtƒ@‚É“]‘—
-	worldTransform_.TransferMatrix();
-
-	//ƒp[ƒeƒBƒNƒ‹XV
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æ›´æ–°
 	for (uint32_t i = 0; i < kNumParticles; ++i)
 	{
-		//Šî–{‚Æ‚È‚é‘¬“xƒxƒNƒgƒ‹
+		//åŸºæœ¬ã¨ãªã‚‹é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 velocity = { kSpeed ,0,0 };
-		//‰ñ“]Šp‚ğŒvZ‚·‚é
+		//å›è»¢è§’ã‚’è¨ˆç®—ã™ã‚‹
 		float angle = kAngleUnit * i;
-		//z²‚Ü‚í‚è‰ñ“]s—ñ
+		//zè»¸ã¾ã‚ã‚Šå›è»¢è¡Œåˆ—
 		Matrix4x4 matrixRotation = MakeRotateZMatrix(angle);
-		//Šî–{ƒxƒNƒgƒ‹‚ğ‰ñ“]‚³‚¹‚Ä‘¬“xƒxƒNƒgƒ‹‚ğ“¾‚é
+		//åŸºæœ¬ãƒ™ã‚¯ãƒˆãƒ«ã‚’å›è»¢ã•ã›ã¦é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¾—ã‚‹
 		velocity = Transform(velocity, matrixRotation);
-		//ˆÚ“®ˆ—
-		worldTransforms_[i].translation_ += velocity;
+		//ç§»å‹•å‡¦ç†
+		worldTransforms_[i].translation_ = worldTransforms_[i].translation_ + velocity;
 	}
 
-	//ƒJƒEƒ“ƒ^[‚ğ1ƒtƒŒ[ƒ€•ª‚ğ•b”i‚ß‚é
+	//ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã‚’1ãƒ•ãƒ¬ãƒ¼ãƒ åˆ†ã‚’ç§’æ•°é€²ã‚ã‚‹
 	counter_ += 1.0f / 60.0f;
 
-	//‘¶‘±ŠÔ‚ÌãŒÀ‚É’B‚µ‚½‚ç
+	//å­˜ç¶šæ™‚é–“ã®ä¸Šé™ã«é”ã—ãŸã‚‰
 	if (counter_ >= kDuration)
 	{
 		counter_ = kDuration;
-		//I—¹ˆµ‚¢‚·‚é
+		//çµ‚äº†æ‰±ã„ã™ã‚‹
 		isFinished_ = true;
 	}
 
-	//I—¹‚È‚ç‰½‚à‚µ‚È‚¢
+	//çµ‚äº†ãªã‚‰ä½•ã‚‚ã—ãªã„
 	if (isFinished_)
 	{
 		return;
 	}
 
-	//s—ñŒvZ
-	worldTransform_.UpdateMatrix();
+	//å½©åº¦ä¸‹ã’ã‚‹
+	color_.w -= 0.01f;
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æ›´æ–°
+	color_.w = std::clamp(1.0f - counter_, 0.0f, 1.0f);
+	//è‰²å¤‰æ›´objectã«è‰²ã®æ•°å€¤ã‚’è¨­å®šã™ã‚‹
+	objectColor_.SetColor(color_);
+	//è‰²å¤‰æ›´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’VRAMã«è»¢é€
+	objectColor_.TransferMatrix();
+
+	//è¡Œåˆ—è¨ˆç®—
+	for (auto& worldTransform : worldTransforms_)
+	{
+		worldTransform.UpdateMatrix();
+	}
 }
 
+//æç”»
 void DeathParticles::Draw()
 {
 
-	//I—¹‚È‚ç‰½‚à‚µ‚È‚¢
+	//çµ‚äº†ãªã‚‰ä½•ã‚‚ã—ãªã„
 	if (isFinished_)
 	{
 		return;
 	}
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”»
+	for (auto& worldTransform : worldTransforms_)
+	{
+		model_->Draw(worldTransform, *viewProjection_, &objectColor_);
+	}
 }
+
+

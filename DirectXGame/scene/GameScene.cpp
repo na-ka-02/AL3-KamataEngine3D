@@ -264,7 +264,7 @@ void GameScene::Update()
 			break;
 
 
-/////////倒された
+			/////////倒された
 		case Phase::kDeath:
 			//敵キャラの更新
 			enemy_->Update();
@@ -482,7 +482,9 @@ void GameScene::CheckAllCollisions()
 
 void GameScene::ChangePhase()
 {
-	isDead_ = player_->IsDead();
+	if (player_ != nullptr) {
+		isDead_ = player_->IsDead();
+	}
 	switch (phase_)
 	{
 		//ゲームプレイフェーズ

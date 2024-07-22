@@ -1,14 +1,11 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include "math.h"
+#include"Model.h"
 #include"Vector3.h"
 #include "WorldTransform.h"
 #include"ObjectColor.h"
 #include<array>
-
-class Model;
-class ViewProjection;
-class Player;
 
 /// <summary>
 /// デス演出用パーティクル
@@ -30,9 +27,9 @@ public:
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// デスパーティクルのgetter
+	/// パーティクル出す
 	/// </summary>
-	bool IsFinished()const { return isFinished_; }
+	bool IsFinished() const;
 private:
 	Model* model_;
 	ViewProjection* viewProjection_;

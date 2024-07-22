@@ -482,6 +482,7 @@ void GameScene::CheckAllCollisions()
 
 void GameScene::ChangePhase()
 {
+	isDead_ = player_->IsDead();
 	switch (phase_)
 	{
 		//ゲームプレイフェーズ

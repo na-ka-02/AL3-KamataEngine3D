@@ -11,6 +11,7 @@
 
 class Enemy;
 class MapChipField;
+class GameScene;
 
 //キャラの左右の向き
 enum class LRDirection
@@ -101,8 +102,20 @@ public:
 	/// AABB取得
 	/// </summary>
 	AABB GetAABB();
-
+	/// <summary>
+	/// 敵に当たった時
+	/// </summary>
+	/// <param name="enemy"></param>
 	void OnCollision(const Enemy* enemy);
+	/// <summary>
+	/// デスフラグのgetter
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead()const;
+
+/// <summary>
+/// 
+/// </summary>
 
 private:
 	/// <summary>
@@ -120,7 +133,7 @@ private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	//3Dモデル
-	Model* playerModel_ = nullptr;
+	Model* model_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//ビュープロジェクション
@@ -134,12 +147,12 @@ private:
 	//速度減衰
 	static inline const float kAttenuation = 0.1f;
 	//着地時の速度減衰率
-	static inline const float kAttenuationWall = 0.1f;
+	static inline const float kAttenuationWall = 0.5f;
 	//最大速度制限
-	static inline const float kLimitRunSpeed = 0.6f;
+	static inline const float kLimitRunSpeed = 0.2f;
 	LRDirection lrDirection_ = LRDirection::kRight;
 	//旋回開始時の角度
-	float turnFirstRotationY_ = std::numbers::pi_v < float>*5.0f / 2.0f;
+	float turnFirstRotationY_ = std::numbers::pi_v < float>*3.0f / 2.0f;
 	//旋回タイマー
 	float turnTimer_ = 0.0f;
 	//旋回時間<秒>
@@ -147,16 +160,18 @@ private:
 	//接地状態フラグ
 	bool onGround_ = true;
 	//重力加速度(下方向)
-	static inline const float kGravityAcceleration = 0.2f;
+	static inline const float kGravityAcceleration = 0.08f;
 	//最大落下速度(下方向)
-	static inline const float kLimitFallSpeed = 1.5f;
+	static inline const float kLimitFallSpeed = 0.7f;
 	//ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 1.5f;
+	static inline const float kJumpAcceleration = 1.3f;
 	//摩擦、着地時の速度減衰率
-	static inline const float kAttenuationLanding = 0.02f;
+	static inline const float kAttenuationLanding = 0.3f;
 	//キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;//横
-	static inline const float kHeight = 0.8f;//縦
+	static inline const float kWidth = 1.9f;//横
+	static inline const float kHeight = 1.8f;//縦
 	//ブロックにのめり込む
-	static inline const float kBlank = 0.8f;
+	static inline const float kBlank = 0.2f;
+	//ですフラグ
+	bool isDead_ = false;
 };

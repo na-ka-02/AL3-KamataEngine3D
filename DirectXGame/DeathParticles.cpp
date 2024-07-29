@@ -89,4 +89,9 @@ void DeathParticles::Draw()
 	}
 }
 
+bool DeathParticles::IsFinished() const
+{
+	return isFinished_;
+}
+
 

@@ -106,34 +106,24 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\3d\WorldTransform.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\CameraController.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\DeathParticles.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Enemy.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\MapChipField.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\mathMT.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Player.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Skydome.cpp" />
-    <ClCompile Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Vector3.cpp" />
     <ClCompile Include="2d\ImGuiManager.cpp" />
+    <ClCompile Include="3d\WorldTransform.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="DeathParticles.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapChipField.cpp" />
+    <ClCompile Include="mathMT.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TitleText.cpp" />
+    <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\AABB.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\CameraController.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\DeathParticles.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\easing.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Enemy.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\MapChipField.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\mathMT.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Player.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Rect.h" />
-    <ClInclude Include="..\..\AL3-KamataEngine3D - コピー\DirectXGame\Skydome.h" />
     <ClInclude Include="2d\ImGuiManager.h" />
     <ClInclude Include="2d\Sprite.h" />
     <ClInclude Include="3d\AxisIndicator.h" />
@@ -152,17 +142,27 @@
     <ClInclude Include="3d\TerrainCommon.h" />
     <ClInclude Include="3d\ViewProjection.h" />
     <ClInclude Include="3d\WorldTransform.h" />
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\StringUtility.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="DeathParticles.h" />
+    <ClInclude Include="easing.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="MapChipField.h" />
+    <ClInclude Include="mathMT.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="Skydome.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TitleText.h" />
   </ItemGroup>

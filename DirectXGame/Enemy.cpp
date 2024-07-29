@@ -1,4 +1,4 @@
-﻿#include "Enemy.h"
+#include "Enemy.h"
 #include <cassert>
 #include "Player.h"
 
@@ -10,7 +10,7 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	//メンバ変数に記憶
-	model_ = model;
+	enemyModel_ = model;
 	worldTransform_.translation_ = position;
 	viewProjection_ = viewProjection;
 	//初期回転
@@ -42,7 +42,7 @@ void Enemy::Update()
 void Enemy::Draw()
 {
 	//3Dモデル描画
-	model_->Draw(worldTransform_, *viewProjection_);
+	enemyModel_->Draw(worldTransform_, *viewProjection_);
 }
 
 Vector3 Enemy::GetWorldPosition()

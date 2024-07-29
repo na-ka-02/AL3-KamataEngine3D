@@ -1,4 +1,4 @@
-﻿#include "Skydome.h"
+#include "Skydome.h"
 #include <cassert>
 
 Skydome::Skydome()
@@ -16,7 +16,7 @@ void Skydome::Initialize(Model* model,ViewProjection* viewProjection)
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	//メンバ変数に記憶
-	model_ = model;
+	skydomeModel_ = model;
 	viewProjection_ = viewProjection;
 }
 
@@ -27,5 +27,5 @@ void Skydome::Update()
 
 void Skydome::Draw()
 {
-	model_->Draw(worldTransform_, *viewProjection_);
+	skydomeModel_->Draw(worldTransform_, *viewProjection_);
 }

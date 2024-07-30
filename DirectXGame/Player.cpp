@@ -1,4 +1,4 @@
-﻿#define NOMINMAX
+#define NOMINMAX
 #include "Player.h"
 #include"MapChipField.h"
 #include <cassert>
@@ -43,12 +43,12 @@ void Player::Update()
 	{
 		//移動入力
 		//左右移動操作
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A))
 		{
 			//左右加速
 			Vector3 acceleration = {};
 			//		//右入力
-			if (Input::GetInstance()->PushKey(DIK_RIGHT))
+			if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_D))
 			{
 				//左移動中の右入力
 				if (velocity_.x < 0.0f)
@@ -68,7 +68,7 @@ void Player::Update()
 				acceleration.x += kAcceleration;
 			}
 			//左入力
-			else if (Input::GetInstance()->PushKey(DIK_LEFT))
+			else if (Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_A))
 			{
 				//右移動中の左入力
 				if (velocity_.x > 0.0f)
@@ -105,7 +105,7 @@ void Player::Update()
 		}
 
 		//ジャンプ処理
-		if (Input::GetInstance()->TriggerKey(DIK_UP))
+		if (Input::GetInstance()->TriggerKey(DIK_UP)|| Input::GetInstance()->PushKey(DIK_W))
 		{
 			//ジャンプ初速
 			velocity_ += Vector3(0, kJumpAcceleration, 0);
